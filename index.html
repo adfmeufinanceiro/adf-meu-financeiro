@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010">
+<title>ADF Meu Financeiro</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:#f5f5f5;font-family:Arial,sans-serif;padding:18px}
+header{text-align:center;padding:22px 0}
+.logo{font-size:36px;font-weight:900;letter-spacing:3px;color:#ff8a00}
+header p{font-size:12px;letter-spacing:4px;margin:5px;color:#aaa}
+h2{font-size:17px;margin:22px 0 12px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#1d1d1d;border:1px solid #333;border-radius:12px;padding:15px}
+.card small{color:#aaa}
+.card strong{display:block;font-size:20px;margin-top:9px;overflow-wrap:anywhere}
+.green{color:#25c875}
+.red{color:#ff6262}
+.orange{color:#ff9900}
+input,select,button{font:inherit}
+input,select{width:100%;padding:13px;margin:6px 0;background:#202020;color:white;border:1px solid #444;border-radius:8px}
+button{border:0;border-radius:8px;padding:13px;background:#ff8a00;color:#111;font-weight:bold;cursor:pointer}
+button.secondary{background:#292929;color:white;border:1px solid #444}
+button.danger{background:#4a2020;color:#ff9999}
+form button{width:100%;margin-top:8px}
+.panel{background:#1a1a1a;padding:15px;border-radius:12px;border:1px solid #333}
+.transaction{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #333}
+.transaction:last-child{border:0}
+.transaction small{display:block;color:#999;margin-top:5px}
+.transaction button{padding:7px 10px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{flex:1;min-width:120px}
+.empty{color:#999;text-align:center;padding:22px}
+footer{text-align:center;color:#666;font-size:11px;padding:30px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ADF</div>
+  <p>MEU FINANCEIRO</p>
+  <small>CONTROLE FINANCEIRO PESSOAL</small>
+</header>
+
+<h2>Resumo financeiro</h2>
+<div class="panel">
+  <label for="month">Mês de referência</label>
+  <input type="month" id="month">
+</div>
+
+<div class="cards" style="margin-top:12px">
+  <div class="card">
+    <small>Entradas</small>
+    <strong class="green" id="income">R$ 0,00</strong>
+  </div>
+  <div class="card">
+    <small>Despesas</small>
+    <strong class="red" id="expense">R$ 0,00</strong>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <small>Saldo do mês</small>
+    <strong class="orange" id="balance">R$ 0,00</strong>
+  </div>
+</div>
+
+<h2>Adicionar lançamento</h2>
+<div class="panel">
+<form id="form">
+  <label>Tipo de lançamento</label>
+  <select id="type">
+    <option value="income">Entrada / Recebimento</option>
+    <option value="expense">Saída / Despesa</option>
+  </select>
+
+  <label>Descrição</label>
+  <input id="description" placeholder="Ex.: Serviço de filmagem" required>
+
+  <label>Valor (R$)</label>
+  <input id="amount" type="number" min="0.01" step="0.01" placeholder="0,00" required>
+
+  <label>Data</label>
+  <input id="date" type="date" required>
+
+  <label>Categoria</label>
+  <select id="category">
+    <option>Trabalho</option>
+    <option>Alimentação</option>
+    <option>Moradia</option>
+    <option>Transporte</option>
+    <option>Saúde</option>
+    <option>Lazer</option>
+    <option>Impostos</option>
+    <option>Outros</option>
+  </select>
+
+  <label>Conta fixa?</label>
+  <select id="fixed">
+    <option value="no">Não</option>
+    <option value="yes">Sim</option>
+  </select>
+
+  <button type="submit">+ Adicionar lançamento</button>
+</form>
+</div>
+
+<h2>Histórico de lançamentos</h2>
+<div class="panel" id="transactions"></div>
+
+<h2>Backup dos dados</h2>
+<div class="panel">
+  <p style="color:#aaa;font-size:13px">
+    Salve uma cópia dos seus lançamentos ou restaure um backup anterior.
+  </p>
+  <div class="actions">
+    <button onclick="backup()">Exportar backup</button>
+    <button class="secondary" onclick="document.getElementById('restore').click()">Restaurar backup</button>
+  </div>
+  <input type="file" id="restore" accept=".json,application/json" hidden>
+</div>
+
+<footer>ADF MEU FINANCEIRO · CONTROLE COM ORGANIZAÇÃO</footer>
+
+<script>
+const KEY = "adf_meu_financeiro_v1";
+let transactions = [];
+
+try {
+  transactions = JSON.parse(localStorage.getItem(KEY) || "[]");
+  if (!Array.isArray(transactions)) transactions = [];
+} catch(e) {
+  transactions = [];
+}
+
+const $ = id => document.getElementById(id);
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(transactions));
+  render();
+}
+
+function money(value) {
+  return Number(value).toLocaleString("pt-BR", {
+    style:"currency", currency:"BRL"
+  });
+}
+
+function currentMonth() {
+  return $("month").value;
+}
+
+function render() {
+  const month = currentMonth();
+  const list = transactions.filter(t => t.date.startsWith(month));
+
+  const incomes = list
+    .filter(t => t.type === "income")
+    .reduce((s,t) => s + t.amount, 0);
+
+  const expenses = list
+    .filter(t => t.type === "expense")
+    .reduce((s,t) => s + t.amount, 0);
+
+  $("income").textContent = money(incomes);
+  $("expense").textContent = money(expenses);
+  $("balance").textContent = money(incomes-expenses);
+
+  const container = $("transactions");
+
+  if (!list.length) {
+    container.innerHTML = '<div class="empty">Nenhum lançamento neste mês.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  [...list].sort((a,b) => b.date.localeCompare(a.date))
+    .forEach(t => {
+      const item = document.createElement("div");
+      item.className = "transaction";
+
+      const info = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = t.description;
+
+      const details = document.createElement("small");
+      details.textContent =
+        t.date.split("-").reverse().join("/") +
+        " · " + t.category +
+        (t.fixed ? " · Conta fixa" : "");
+
+      info.append(title, details);
+
+      const right = document.createElement("div");
+      right.style.textAlign = "right";
+
+      const value = document.createElement("strong");
+      value.className = t.type === "income" ? "green" : "red";
+      value.textContent = (t.type === "income" ? "+" : "-") + money(t.amount);
+
+      const del = document.createElement("button");
+      del.className = "danger";
+      del.textContent = "Excluir";
+      del.onclick = () => {
+        if(confirm("Deseja excluir este lançamento?")) {
+          transactions = transactions.filter(x => x.id !== t.id);
+          save();
+        }
+      };
+
+      right.append(value, document.createElement("br"), del);
+      item.append(info, right);
+      container.append(item);
+    });
+}
+
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const description = $("description").value.trim();
+  const amount = Number($("amount").value);
+  const date = $("date").value;
+
+  if (!description || !Number.isFinite(amount) || amount <= 0 || !date) {
+    alert("Confira a descrição, o valor e a data.");
+    return;
+  }
+
+  transactions.push({
+    id: Date.now().toString() + Math.random().toString(16).slice(2),
+    type: $("type").value,
+    description,
+    amount,
+    date,
+    category: $("category").value,
+    fixed: $("fixed").value === "yes"
+  });
+
+  save();
+  $("form").reset();
+  $("date").value = new Date().toLocaleDateString("en-CA");
+  alert("Lançamento adicionado com sucesso!");
+});
+
+function backup() {
+  const blob = new Blob(
+    [JSON.stringify(transactions, null, 2)],
+    {type:"application/json"}
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ADF-meu-financeiro-backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+$("restore").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const data = JSON.parse(await file.text());
+
+    if (!Array.isArray(data) || !data.every(t =>
+      t && typeof t.id === "string" &&
+      ["income","expense"].includes(t.type) &&
+      typeof t.amount === "number" &&
+      typeof t.description === "string" &&
+      typeof t.date === "string"
+    )) {
+      throw new Error("Arquivo inválido");
+    }
+
+    if (confirm("Restaurar este backup? Os dados atuais serão substituídos.")) {
+      transactions = data;
+      save();
+      alert("Backup restaurado!");
+    }
+  } catch(err) {
+    alert("Não foi possível restaurar. Verifique o arquivo.");
+  }
+
+  e.target.value = "";
+});
+
+$("month").value = new Date().toISOString().slice(0,7);
+$("date").value = new Date().toLocaleDateString("en-CA");
+$("month").addEventListener("change", render);
+
+render();
+</script>
+</body>
+</html>
