@@ -5,14 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101010">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23101010'/%3E%3Cpath d='M12 72 38 20h12l26 52H61l-5-12H31l-6 12z M36 49h15l-7-18z' fill='%23f59e0b'/%3E%3Ctext x='51' y='88' font-size='19' font-family='Arial' font-weight='bold' fill='%23fff'%3ED%3C/text%3E%3C/svg%3E">
 <title>ADF Meu Financeiro</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#101010;color:#f5f5f5;font-family:Arial,sans-serif}
 header{background:#191919;padding:22px 16px;border-bottom:2px solid #d97706}
-.logo{font-size:25px;font-weight:bold;letter-spacing:2px}
-.logo span{color:#f59e0b}
+.logo{display:flex;align-items:center;justify-content:flex-start}
+.logo img{display:block;width:min(230px,75vw);height:auto;max-height:82px;object-fit:contain}
 header small{color:#aaa}
 main{padding:15px;max-width:850px;margin:auto;padding-bottom:35px}
 h2{font-size:19px;margin:23px 0 12px}
@@ -61,7 +62,7 @@ footer{text-align:center;color:#666;padding:25px;font-size:12px}
 </head>
 <body>
 <header>
- <div class="logo"><span>ADF</span> MEU FINANCEIRO</div>
+ <div class="logo"><img src="logo-adf.png" alt="Anderson Duarte Filmes — ADF"></div>
  <small>Organize suas finanças, realize seus planos!</small>
 </header>
 <main>
@@ -86,29 +87,27 @@ footer{text-align:center;color:#666;padding:25px;font-size:12px}
   <div class="card"><small>Cofrinho</small><div class="value orange" id="reserva">R$ 0,00</div></div>
   <div class="card"><small>Resultado semanal</small><div class="value cyan" id="semResultado">R$ 0,00</div></div>
  </div>
-
  <h2>Movimentação da semana</h2>
  <div class="grid">
   <div class="card"><small>Entradas</small><div class="value green" id="semEntrada">R$ 0,00</div></div>
   <div class="card"><small>Saídas</small><div class="value red" id="semSaida">R$ 0,00</div></div>
  </div>
-
  <h2>Meu patrimônio reservado</h2>
  <div class="card">
   <small>Caixa + cofrinho</small>
   <div class="value" id="totalGeral">R$ 0,00</div>
  </div>
+ <h2>Próximos vencimentos</h2>
+ <div class="panel" id="planejamento"></div>
  <h2>Últimos lançamentos</h2>
  <div class="panel" id="ultimos"></div>
  <h2>Resumo financeiro</h2>
  <div class="panel" id="resumo"></div>
-
  <h2>Histórico de backups (últimos 30)</h2>
  <div class="panel">
   <div class="status" id="driveHistoryStatus">Conecte o Google Drive para visualizar os backups.</div>
   <div id="historicoDrive"><div class="empty">Nenhum backup carregado.</div></div>
  </div>
-
  <h2>Google Drive</h2>
  <div class="panel">
   <div class="drive-head">
@@ -174,12 +173,12 @@ footer{text-align:center;color:#666;padding:25px;font-size:12px}
  </div>
  <h2>Cadastrar dívida</h2>
  <div class="panel">
-  <label>Nome da dívida</label><input id="nomeDivida" placeholder="Ex: Cheque especial Caixa">
-  <label>Instituição</label><select id="banco"><option>Caixa</option><option>C6 Bank</option><option>Outro</option></select>
-  <label>Valor total (R$)</label><input id="valorDivida" type="number" min="0.01" step="0.01">
-  <label>Valor de cada parcela (R$)</label><input id="parcelaDivida" type="number" min="0" step="0.01">
+  <label>Descrição da dívida / compra</label><input id="nomeDivida" placeholder="Ex: Passagem aérea">
+  <label>Cartão (titular)</label><input id="titularCartao" placeholder="Ex: meu, Davi">
+  <label>Valor total (R$)</label><input id="valorDivida" type="number" min="0.01" step="0.01" placeholder="0,00">
   <label>Quantidade de parcelas</label><input id="qtdParcelas" type="number" min="1" step="1" value="1">
-  <label>Vencimento</label><input id="vencimento" type="date">
+  <label>Vencimento da primeira parcela</label><input id="vencimento" type="date">
+  <p class="status">O aplicativo divide o valor automaticamente e calcula os vencimentos mensais. A compra não entra como despesa no caixa; cada parcela será lançada como despesa somente quando você marcar que pagou.</p>
   <button class="action" onclick="adicionarDivida()">Cadastrar dívida</button>
  </div>
  <h2>Dívidas cadastradas</h2><div class="panel" id="listaDividas"></div>
@@ -323,25 +322,77 @@ function movimentarCofre(){
  salvar();alert('Movimentação realizada!');
 }
 
-function adicionarDivida(){
- let nome=$('nomeDivida').value.trim(),v=Number($('valorDivida').value);
- if(!nome||v<=0)return alert('Preencha o nome e o valor da dívida.');
- db.dividas.push({id:Date.now(),nome,banco:$('banco').value,valor:v,pago:0,parcela:Number($('parcelaDivida').value)||0,qtd:Number($('qtdParcelas').value)||1,vencimento:$('vencimento').value});
- $('nomeDivida').value='';$('valorDivida').value='';$('parcelaDivida').value='';
- salvar();
+function dataParcela(primeira,indice){
+ let d=new Date((primeira||dataHoje())+'T12:00:00');let dia=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+indice);let ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(dia,ultimo));return d.toISOString().slice(0,10);
 }
-function pagarDivida(id){
- let d=db.dividas.find(x=>x.id===id);
- if(!d)return;
- let v=Number(prompt('Quanto deseja pagar desta dívida? Saldo: '+dinheiro(d.valor-d.pago)));
- if(!v||v<=0||v>d.valor-d.pago)return alert('Valor inválido.');
- if(v>caixaAtual())return alert('Saldo em caixa insuficiente.');
- d.pago+=v;
- db.lancamentos.push({id:Date.now(),tipo:'saida',descricao:'Pagamento: '+d.nome,valor:v,categoria:'Pagamento de dívida',data:dataHoje(),obs:'Pagamento registrado na área de dívidas'});
+function normalizarDividas(){
+ db.dividas.forEach(d=>{
+  if(!Array.isArray(d.parcelas)){
+   let qtd=Math.max(1,Number(d.qtd)||1);
+   let total=Math.max(0,Number(d.valor)||0);
+   let pago=Math.max(0,Number(d.pago)||0);
+   let base=Math.floor((total/qtd)*100)/100;
+   let resto=Math.round((total-base*qtd)*100);
+   d.parcelas=Array.from({length:qtd},(_,i)=>({
+    id:String(d.id)+'-'+i,
+    valor:base+(i<resto?0.01:0),
+    vencimento:dataParcela(d.vencimento,i),
+    paga:false
+   }));
+   let rp=pago;
+   d.parcelas.forEach(p=>{
+    if(rp>=p.valor-0.001){p.paga=true;rp-=p.valor}
+    else if(rp>0){p.valorPago=rp;rp=0}
+   });
+  }
+ });
+}
+normalizarDividas();
+
+function adicionarDivida(){
+ let nome=$('nomeDivida').value.trim();
+ let titular=$('titularCartao').value.trim()||'Não informado';
+ let total=Math.round(Number($('valorDivida').value)*100);
+ let qtd=Math.floor(Number($('qtdParcelas').value)||0);
+ let primeira=$('vencimento').value;
+ if(!nome||!total||total<1||qtd<1||qtd>240||!primeira)
+  return alert('Preencha a descrição, o valor, a quantidade de parcelas e o primeiro vencimento.');
+ let base=Math.floor(total/qtd);
+ let resto=total-base*qtd;
+ let parcelas=Array.from({length:qtd},(_,i)=>({
+  id:String(Date.now())+'-'+i,
+  valor:(base+(i<resto?1:0))/100,
+  vencimento:dataParcela(primeira,i),
+  paga:false
+ }));
+ db.dividas.push({id:Date.now(),nome,tipo:'Cartão',titular,valor:total/100,parcelas});
+ $('nomeDivida').value='';
+ $('titularCartao').value='';
+ $('valorDivida').value='';
+ $('qtdParcelas').value='1';
+ $('vencimento').value='';
+ salvar();
+ alert('Dívida cadastrada com parcelas e vencimentos automáticos!');
+}
+function pagarParcela(idDivida,idParcela){
+ let d=db.dividas.find(x=>x.id===idDivida);
+ let p=d&&d.parcelas.find(x=>String(x.id)===String(idParcela));
+ if(!p||p.paga)return;
+ if(p.valor>caixaAtual())return alert('Saldo em caixa insuficiente para pagar esta parcela.');
+ if(!confirm('Confirmar pagamento de '+dinheiro(p.valor)+' da dívida “'+d.nome+'”?'))return;
+ p.paga=true;
+ db.lancamentos.push({
+  id:Date.now(),tipo:'saida',
+  descricao:'Parcela paga: '+d.nome+' ('+(d.titular||'Cartão')+')',
+  valor:Number(p.valor),categoria:'Cartão',data:dataHoje(),
+  obs:'Pagamento da parcela com vencimento em '+p.vencimento
+ });
  salvar();
 }
 function excluirDivida(id){
- if(confirm('Excluir esta dívida?')){db.dividas=db.dividas.filter(x=>x.id!==id);salvar()}
+ if(confirm('Excluir esta dívida e suas parcelas? Os lançamentos de pagamentos já registrados não serão apagados.')){
+  db.dividas=db.dividas.filter(x=>x.id!==id);salvar()
+ }
 }
 
 function adicionarConta(){
@@ -356,7 +407,11 @@ function marcarConta(id){
  if(!c||c.paga)return alert('Esta conta já foi marcada como paga.');
  if(c.valor>caixaAtual())return alert('Saldo em caixa insuficiente.');
  c.paga=true;
- db.lancamentos.push({id:Date.now(),tipo:'saida',descricao:'Conta fixa: '+c.nome,valor:c.valor,categoria:'Contas fixas',data:dataHoje(),obs:'Conta marcada como paga'});
+ db.lancamentos.push({
+  id:Date.now(),tipo:'saida',descricao:'Conta fixa: '+c.nome,
+  valor:c.valor,categoria:'Contas fixas',data:dataHoje(),
+  obs:'Conta marcada como paga'
+ });
  salvar();
 }
 function excluirConta(id){
@@ -381,9 +436,9 @@ function listaLancamentos(arr){
 function render(){
  let entradas=soma(db.lancamentos,'entrada'),saidas=soma(db.lancamentos,'saida');
  let caixa=caixaAtual(),reserva=reservaAtual();
- let abertas=db.dividas.reduce((s,x)=>s+Math.max(0,Number(x.valor)-Number(x.pago)),0);
+ let abertas=db.dividas.reduce((s,d)=>s+(d.parcelas||[]).filter(p=>!p.paga).reduce((a,p)=>a+Number(p.valor),0),0);
  let aReceber=db.receber.filter(x=>!x.recebido).reduce((s,x)=>s+Number(x.valor),0);
- let aPagar=db.contas.filter(x=>!x.paga).reduce((s,x)=>s+Number(x.valor),0);
+ let aPagar=db.contas.filter(x=>!x.paga).reduce((s,x)=>s+Number(x.valor),0)+abertas;
 
  let agora=new Date(),inicio=new Date(agora);
  inicio.setDate(agora.getDate()-((agora.getDay()+6)%7));inicio.setHours(0,0,0,0);
@@ -403,6 +458,23 @@ function render(){
  $('totalDividas').textContent=dinheiro(abertas);
  $('numDividas').textContent=db.dividas.length;
 
+ let vencimentos=[];
+ db.contas.filter(c=>!c.paga).forEach(c=>{
+  let hoje=new Date(),ano=hoje.getFullYear(),mes=hoje.getMonth();
+  let dia=Math.min(Number(c.dia),new Date(ano,mes+1,0).getDate());
+  let dt=new Date(ano,mes,dia,12);
+  if(dt<new Date(ano,mes,hoje.getDate()))
+   dt=new Date(ano,mes+1,Math.min(Number(c.dia),new Date(ano,mes+2,0).getDate()),12);
+  vencimentos.push({data:dt.toISOString().slice(0,10),nome:c.nome,valor:c.valor,tipo:'Conta fixa'});
+ });
+ db.dividas.forEach(d=>(d.parcelas||[]).filter(p=>!p.paga).forEach(p=>
+  vencimentos.push({data:p.vencimento,nome:d.nome+' • '+(d.titular||'Cartão'),valor:p.valor,tipo:'Parcela do cartão'})
+ ));
+ vencimentos.sort((a,b)=>String(a.data).localeCompare(String(b.data)));
+ $('planejamento').innerHTML=vencimentos.slice(0,12).map(v=>
+  '<div class="item"><strong>'+esc(v.nome)+'</strong><small>'+esc(v.tipo)+' • Vencimento: '+esc(v.data)+'</small><div class="red">'+dinheiro(v.valor)+'</div></div>'
+ ).join('')||'<div class="empty">Nenhum vencimento pendente cadastrado.</div>';
+
  $('ultimos').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))).slice(0,5));
  $('historico').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))));
  $('resumo').innerHTML='<p>Entradas acumuladas: <b class="green">'+dinheiro(entradas)+'</b></p><p>Despesas acumuladas: <b class="red">'+dinheiro(saidas)+'</b></p><p>Dinheiro reservado: <b class="orange">'+dinheiro(reserva)+'</b></p><p>Valores a receber: <b class="blue">'+dinheiro(aReceber)+'</b></p>';
@@ -412,14 +484,21 @@ function render(){
   (x.recebido?'<span class="green">Recebido</span>':'<button class="action" onclick="marcarRecebido('+Number(x.id)+')">Marcar como recebido</button>')+'</div>'
  ).join('')||'<div class="empty">Nenhum valor cadastrado.</div>';
 
- $('histCofre').innerHTML=db.cofre.slice().reverse().map(x=>'<div class="item"><strong>'+esc(x.descricao)+'</strong><small>'+esc(x.data)+' • '+(x.tipo==='deposito'?'Depósito':'Retirada')+'</small><div class="'+(x.tipo==='deposito'?'green':'orange')+'">'+dinheiro(x.valor)+'</div></div>').join('')||'<div class="empty">Nenhuma movimentação.</div>';
+ $('histCofre').innerHTML=db.cofre.slice().reverse().map(x=>
+  '<div class="item"><strong>'+esc(x.descricao)+'</strong><small>'+esc(x.data)+' • '+(x.tipo==='deposito'?'Depósito':'Retirada')+'</small><div class="'+(x.tipo==='deposito'?'green':'orange')+'">'+dinheiro(x.valor)+'</div></div>'
+ ).join('')||'<div class="empty">Nenhuma movimentação.</div>';
 
- $('listaDividas').innerHTML=db.dividas.map(x=>{
-  let restante=Math.max(0,x.valor-x.pago),percent=x.valor?Math.min(100,x.pago/x.valor*100):0;
-  return '<div class="item"><button class="secondary" onclick="excluirDivida('+Number(x.id)+')">Excluir</button><strong>'+esc(x.nome)+' • '+esc(x.banco)+'</strong><small>Vencimento: '+esc(x.vencimento||'Não informado')+' • '+Number(x.qtd)+' parcela(s)</small><p>Valor: '+dinheiro(x.valor)+' | Pago: '+dinheiro(x.pago)+'</p><p class="'+(restante<=0?'green':'red')+'">Restante: '+dinheiro(restante)+' • '+(restante<=0?'Quitada':x.pago>0?'Parcialmente paga':'Em aberto')+'</p><div class="progress"><div style="width:'+percent+'%"></div></div>'+(restante>0?'<button class="action" onclick="pagarDivida('+Number(x.id)+')">Registrar pagamento</button>':'')+'</div>';
+ $('listaDividas').innerHTML=db.dividas.map(d=>{
+  let parcelas=d.parcelas||[];
+  let restante=parcelas.filter(p=>!p.paga).reduce((a,p)=>a+Number(p.valor),0);
+  let pago=parcelas.filter(p=>p.paga).reduce((a,p)=>a+Number(p.valor),0);
+  let percent=d.valor?Math.min(100,pago/d.valor*100):0;
+  return '<div class="item"><button class="secondary" onclick="excluirDivida('+Number(d.id)+')">Excluir</button><strong>'+esc(d.nome)+'</strong><small>Cartão: '+esc(d.titular||'Não informado')+' • '+parcelas.length+' parcela(s)</small><p>Valor total: '+dinheiro(d.valor)+' | Pago: '+dinheiro(pago)+'</p><p class="'+(restante<=0?'green':'red')+'">Saldo devedor: '+dinheiro(restante)+' • '+(restante<=0?'Quitada':pago>0?'Parcialmente paga':'Em aberto')+'</p><div class="progress"><div style="width:'+percent+'%"></div></div>'+parcelas.map((p,i)=>'<div class="backup-row" style="padding:7px 0;border-top:1px solid #333"><span><strong>Parcela '+(i+1)+' — '+dinheiro(p.valor)+'</strong><br><small>Vencimento: '+esc(p.vencimento)+'</small></span>'+(p.paga?'<span class="green">Paga</span>':'<button class="action" style="width:auto" onclick="pagarParcela('+Number(d.id)+',&quot;'+String(p.id)+'&quot;)">Marcar paga</button>')+'</div>').join('')+'</div>';
  }).join('')||'<div class="empty">Nenhuma dívida cadastrada.</div>';
 
- $('listaContas').innerHTML=db.contas.map(x=>'<div class="item"><button class="secondary" onclick="excluirConta('+Number(x.id)+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>'+dinheiro(x.valor)+' • Vence dia '+Number(x.dia)+'</p><button class="secondary" onclick="marcarConta('+Number(x.id)+')">'+(x.paga?'Paga':'Marcar como paga')+'</button></div>').join('')||'<div class="empty">Nenhuma conta cadastrada.</div>';
+ $('listaContas').innerHTML=db.contas.map(x=>
+  '<div class="item"><button class="secondary" onclick="excluirConta('+Number(x.id)+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>'+dinheiro(x.valor)+' • Vence dia '+Number(x.dia)+'</p><button class="secondary" onclick="marcarConta('+Number(x.id)+')">'+(x.paga?'Paga':'Marcar como paga')+'</button></div>'
+ ).join('')||'<div class="empty">Nenhuma conta cadastrada.</div>';
 
  $('listaMetas').innerHTML=db.metas.map(x=>{
   let percent=x.valor?Math.min(100,reserva/x.valor*100):0;
@@ -443,7 +522,7 @@ function importar(){
    if(!novo||!Array.isArray(novo.lancamentos)||!Array.isArray(novo.cofre)||!Array.isArray(novo.dividas)||!Array.isArray(novo.contas)||!Array.isArray(novo.metas))throw Error();
    ['receber'].forEach(k=>{if(!Array.isArray(novo[k]))novo[k]=[]});
    if(!confirm('Isso substituirá os dados atuais. Continuar?'))return;
-   db=novo;salvar(false);alert('Backup restaurado!');
+   db=novo;normalizarDividas();salvar(false);alert('Backup restaurado!');
   }catch(e){alert('Arquivo inválido ou incompatível.')}
  };
  r.readAsText(f);
@@ -586,6 +665,7 @@ async function restaurarDrive(id){
   if(!dados||!Array.isArray(dados.lancamentos)||!Array.isArray(dados.cofre)||!Array.isArray(dados.dividas)||!Array.isArray(dados.contas)||!Array.isArray(dados.metas))throw new Error('Este arquivo não parece ser um backup válido do ADF.');
   if(!Array.isArray(dados.receber))dados.receber=[];
   db=dados;
+  normalizarDividas();
   salvar(false);
   alert('Backup restaurado com sucesso!');
  }catch(e){alert('Não foi possível restaurar: '+e.message)}
