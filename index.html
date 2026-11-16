@@ -8,231 +8,1086 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23101010'/%3E%3Cpath d='M12 72 38 20h12l26 52H61l-5-12H31l-6 12z M36 49h15l-7-18z' fill='%23f59e0b'/%3E%3Ctext x='51' y='88' font-size='19' font-family='Arial' font-weight='bold' fill='%23fff'%3ED%3C/text%3E%3C/svg%3E">
 <title>ADF Meu Financeiro</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101010;color:#f5f5f5;font-family:Arial,sans-serif}
-header{background:#191919;padding:22px 16px;border-bottom:2px solid #d97706}
-.logo{display:flex;align-items:center;justify-content:flex-start}
-.logo img{display:block;width:min(340px,90vw);height:auto;max-height:120px;object-fit:contain}
-header small{color:#aaa}
-main{padding:15px;max-width:850px;margin:auto;padding-bottom:35px}
-h2{font-size:19px;margin:23px 0 12px}
-h3{font-size:15px;color:#ddd}
-nav{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:thin}
-nav button{white-space:nowrap;background:#292929;color:white;border:0;border-radius:8px;padding:11px}
+
+body{
+ margin:0;
+ background:#101010;
+ color:#f5f5f5;
+ font-family:Arial,sans-serif
+}
+
+header{
+ background:#191919;
+ padding:25px 16px 20px;
+ border-bottom:2px solid #d97706;
+ text-align:center
+}
+
+.logo{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px
+}
+
+.logo img{
+ display:block;
+ width:min(440px,94vw);
+ height:auto;
+ max-height:175px;
+ object-fit:contain
+}
+
+header strong{
+ color:#eee;
+ font-size:15px;
+ letter-spacing:2px;
+ text-align:center
+}
+
+header small{
+ display:block;
+ color:#aaa;
+ margin-top:10px;
+ font-size:12px
+}
+
+main{
+ padding:15px;
+ max-width:850px;
+ margin:auto;
+ padding-bottom:35px
+}
+
+h2{
+ font-size:19px;
+ margin:23px 0 12px
+}
+
+h3{
+ font-size:15px;
+ color:#ddd
+}
+
+nav{
+ display:flex;
+ gap:7px;
+ overflow-x:auto;
+ padding:12px 0;
+ scrollbar-width:thin
+}
+
+nav button{
+ white-space:nowrap;
+ background:#292929;
+ color:white;
+ border:0;
+ border-radius:8px;
+ padding:12px 14px;
+ font-size:13px
+}
+
 button{cursor:pointer}
-nav button.active,.primary{background:#d97706;color:#111;font-weight:bold}
+
+nav button.active,.primary{
+ background:#d97706;
+ color:#111;
+ font-weight:bold
+}
+
 section{display:none}
 section.active{display:block}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.card,.panel{background:#1c1c1c;border:1px solid #383838;border-radius:13px;padding:14px;margin-bottom:12px}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px
+}
+
+.card,.panel{
+ background:#1c1c1c;
+ border:1px solid #383838;
+ border-radius:13px;
+ padding:14px;
+ margin-bottom:12px
+}
+
 .card small{color:#aaa}
-.value{font-size:20px;font-weight:bold;margin-top:9px;overflow-wrap:anywhere}
+
+.value{
+ font-size:20px;
+ font-weight:bold;
+ margin-top:9px;
+ overflow-wrap:anywhere
+}
+
 .green{color:#4ade80}
 .red{color:#fb7185}
 .orange{color:#f59e0b}
 .blue{color:#60a5fa}
 .purple{color:#c084fc}
 .cyan{color:#22d3ee}
-input,select,textarea{width:100%;padding:12px;background:#292929;border:1px solid #444;border-radius:8px;color:white;margin:6px 0 12px;font-size:15px}
-label{font-size:13px;color:#bbb}
-button.action{padding:12px;border:0;border-radius:8px;background:#d97706;color:#111;font-weight:bold;width:100%;margin-top:5px}
-button.secondary{background:#333;color:white;padding:9px;border:0;border-radius:7px}
-button.danger{background:#4a2025;color:#ff9ca5;padding:9px;border:0;border-radius:7px}
-.item{border-bottom:1px solid #333;padding:12px 0;overflow:auto}
+
+input,select,textarea{
+ width:100%;
+ padding:12px;
+ background:#292929;
+ border:1px solid #444;
+ border-radius:8px;
+ color:white;
+ margin:6px 0 12px;
+ font-size:15px
+}
+
+label{
+ font-size:13px;
+ color:#bbb
+}
+
+button.action{
+ padding:12px;
+ border:0;
+ border-radius:8px;
+ background:#d97706;
+ color:#111;
+ font-weight:bold;
+ width:100%;
+ margin-top:5px
+}
+
+button.secondary{
+ background:#333;
+ color:white;
+ padding:9px;
+ border:0;
+ border-radius:7px
+}
+
+button.danger{
+ background:#4a2025;
+ color:#ff9ca5;
+ padding:9px;
+ border:0;
+ border-radius:7px
+}
+
+.item{
+ border-bottom:1px solid #333;
+ padding:12px 0;
+ overflow:auto
+}
+
 .item:last-child{border:0}
-.item strong{display:block;margin-bottom:5px}
+
+.item strong{
+ display:block;
+ margin-bottom:5px
+}
+
 .item small{color:#aaa}
-.item button{float:right;margin-left:5px}
-.empty{color:#888;text-align:center;padding:20px}
-.progress{height:9px;background:#333;border-radius:9px;margin:10px 0}
-.progress div{height:100%;background:#f59e0b;border-radius:9px}
-.status{font-size:13px;color:#aaa;line-height:1.5;margin:8px 0}
-.drive-head{display:flex;align-items:center;gap:12px}
+
+.item button{
+ float:right;
+ margin-left:5px
+}
+
+.empty{
+ color:#888;
+ text-align:center;
+ padding:20px
+}
+
+.status{
+ font-size:13px;
+ color:#aaa;
+ line-height:1.5;
+ margin:8px 0
+}
+
+.drive-head{
+ display:flex;
+ align-items:center;
+ gap:12px
+}
+
 .drive-icon{font-size:32px}
 .drive-head strong{font-size:18px}
-.drive-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.drive-actions button{flex:1;min-width:130px}
-.backup-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.backup-row span{flex:1;min-width:160px;font-size:13px;color:#ddd}
-hr{border:0;border-top:1px solid #333;margin:18px 0}
-footer{text-align:center;color:#666;padding:25px;font-size:12px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.drive-actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:10px
+}
+
+.drive-actions button{
+ flex:1;
+ min-width:130px
+}
+
+.backup-row{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ flex-wrap:wrap
+}
+
+.backup-row span{
+ flex:1;
+ min-width:160px;
+ font-size:13px;
+ color:#ddd
+}
+
+.periodo-info{
+ color:#aaa;
+ font-size:13px;
+ margin:5px 0 15px
+}
+
+hr{
+ border:0;
+ border-top:1px solid #333;
+ margin:18px 0
+}
+
+footer{
+ text-align:center;
+ color:#666;
+ padding:25px;
+ font-size:12px
+}
+
+@media(min-width:600px){
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 </style>
 </head>
+
 <body>
+
 <header>
- <div class="logo"><img src="logo-adf.png" alt="Anderson Duarte Filmes — ADF"></div>
+ <div class="logo">
+  <img src="logo-adf.png" alt="Logo ADF">
+  <strong>ANDERSON DUARTE FILMES</strong>
+ </div>
  <small>Organize suas finanças, realize seus planos!</small>
 </header>
+
 <main>
+
 <nav>
  <button class="active" onclick="tab('inicio',this)">Início</button>
- <button onclick="tab('lancamentos',this)">Lançamentos</button>
- <button onclick="tab('receber',this)">A receber</button>
- <button onclick="tab('cofrinho',this)">Cofrinho</button>
- <button onclick="tab('dividas',this)">Dívidas</button>
- <button onclick="tab('contas',this)">Contas</button>
- <button onclick="tab('metas',this)">Metas</button>
+ <button onclick="tab('entrada',this)">Entrada</button>
+ <button onclick="tab('saida',this)">Saída</button>
+ <button onclick="tab('receber',this)">A Receber</button>
+ <button onclick="tab('relatorios',this)">Relatórios</button>
  <button onclick="tab('backup',this)">Backup</button>
 </nav>
 
+<!-- INÍCIO -->
+
 <section id="inicio" class="active">
+
  <h2>Meu painel financeiro</h2>
+
  <div class="grid">
-  <div class="card"><small>Saldo disponível</small><div class="value green" id="caixa">R$ 0,00</div></div>
-  <div class="card"><small>A receber</small><div class="value blue" id="painelReceber">R$ 0,00</div></div>
-  <div class="card"><small>A pagar</small><div class="value red" id="painelPagar">R$ 0,00</div></div>
-  <div class="card"><small>Total das dívidas</small><div class="value purple" id="painelDividas">R$ 0,00</div></div>
-  <div class="card"><small>Cofrinho</small><div class="value orange" id="reserva">R$ 0,00</div></div>
-  <div class="card"><small>Resultado semanal</small><div class="value cyan" id="semResultado">R$ 0,00</div></div>
+  <div class="card">
+   <small>Saldo disponível</small>
+   <div class="value green" id="caixa">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Entradas do mês</small>
+   <div class="value green" id="entradaMes">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Saídas do mês</small>
+   <div class="value red" id="saidaMes">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>A receber</small>
+   <div class="value blue" id="painelReceber">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Resultado do mês</small>
+   <div class="value cyan" id="resultadoMes">R$ 0,00</div>
+  </div>
  </div>
+
  <h2>Movimentação da semana</h2>
+
  <div class="grid">
-  <div class="card"><small>Entradas</small><div class="value green" id="semEntrada">R$ 0,00</div></div>
-  <div class="card"><small>Saídas</small><div class="value red" id="semSaida">R$ 0,00</div></div>
+  <div class="card">
+   <small>Entradas</small>
+   <div class="value green" id="semEntrada">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Saídas</small>
+   <div class="value red" id="semSaida">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Resultado</small>
+   <div class="value cyan" id="semResultado">R$ 0,00</div>
+  </div>
  </div>
- <h2>Meu patrimônio reservado</h2>
- <div class="card">
-  <small>Caixa + cofrinho</small>
-  <div class="value" id="totalGeral">R$ 0,00</div>
- </div>
- <h2>Próximos vencimentos</h2>
- <div class="panel" id="planejamento"></div>
+
+ <h2>Valores pendentes de recebimento</h2>
+ <div class="panel" id="resumoReceber"></div>
+
  <h2>Últimos lançamentos</h2>
  <div class="panel" id="ultimos"></div>
- <h2>Resumo financeiro</h2>
- <div class="panel" id="resumo"></div>
- <h2>Histórico de backups (últimos 30)</h2>
- <div class="panel">
-  <div class="status" id="driveHistoryStatus">Conecte o Google Drive para visualizar os backups.</div>
-  <div id="historicoDrive"><div class="empty">Nenhum backup carregado.</div></div>
- </div>
- <h2>Google Drive</h2>
- <div class="panel">
-  <div class="drive-head">
-   <div class="drive-icon">☁️</div>
-   <div><strong>Backup na nuvem</strong><div class="status" id="driveStatus">Ainda não conectado.</div></div>
-  </div>
-  <div class="drive-actions">
-   <button class="action" id="btnConectar" onclick="conectarDrive()">Conectar Google Drive</button>
-   <button class="secondary" onclick="backupDrive()">Backup agora</button>
-  </div>
-  <div class="status">Com o Drive conectado, o aplicativo tenta salvar uma cópia automaticamente após alterações. O backup também pode ser feito manualmente.</div>
- </div>
+
 </section>
 
-<section id="lancamentos">
- <h2>Novo lançamento</h2>
+<!-- ENTRADA -->
+
+<section id="entrada">
+
+ <h2>Nova entrada</h2>
+
  <div class="panel">
-  <label>Tipo</label>
-  <select id="tipo"><option value="entrada">Entrada de dinheiro</option><option value="saida">Despesa</option></select>
-  <label>Descrição</label><input id="descricao" placeholder="Ex: Filmagem de evento">
-  <label>Valor (R$)</label><input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00">
-  <label>Categoria</label>
-  <select id="categoria">
-   <option>Trabalho ADF</option><option>Salário</option><option>Alimentação</option><option>Combustível</option><option>Casa</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Compras</option><option>Outros</option>
-  </select>
-  <label>Data</label><input id="data" type="date">
-  <label>Observação</label><textarea id="obs" placeholder="Detalhes opcionais"></textarea>
-  <button class="action" onclick="adicionar()">Salvar lançamento</button>
+
+  <label>O que é esta entrada?</label>
+  <input id="descEntrada" placeholder="Ex: Filmagem de evento">
+
+  <label>Valor recebido (R$)</label>
+  <input id="valorEntrada" type="number" min="0.01" step="0.01" placeholder="0,00">
+
+  <label>Data em que o dinheiro entrou</label>
+  <input id="dataEntrada" type="date">
+
+  <button class="action" onclick="adicionarEntrada()">
+   Salvar entrada
+  </button>
+
  </div>
- <h2>Histórico</h2><div class="panel" id="historico"></div>
+
+ <h2>Histórico de entradas</h2>
+ <div class="panel" id="historicoEntrada"></div>
+
 </section>
+
+<!-- SAÍDA -->
+
+<section id="saida">
+
+ <h2>Nova saída</h2>
+
+ <div class="panel">
+
+  <label>O que é esta saída?</label>
+  <input id="descSaida" placeholder="Ex: Combustível, cartão, aluguel...">
+
+  <label>Categoria / Gênero</label>
+  <select id="categoriaSaida">
+   <option>Trabalho ADF</option>
+   <option>Cartão</option>
+   <option>Alimentação</option>
+   <option>Combustível</option>
+   <option>Casa</option>
+   <option>Transporte</option>
+   <option>Saúde</option>
+   <option>Lazer</option>
+   <option>Compras</option>
+   <option>Contas</option>
+   <option>Dívidas</option>
+   <option>Outros</option>
+  </select>
+
+  <label>Valor pago (R$)</label>
+  <input id="valorSaida" type="number" min="0.01" step="0.01" placeholder="0,00">
+
+  <label>Data em que o dinheiro saiu</label>
+  <input id="dataSaida" type="date">
+
+  <button class="action" onclick="adicionarSaida()">
+   Salvar saída
+  </button>
+
+ </div>
+
+ <h2>Histórico de saídas</h2>
+ <div class="panel" id="historicoSaida"></div>
+
+</section>
+
+<!-- A RECEBER -->
 
 <section id="receber">
- <h2>Valores a receber</h2>
+
+ <h2>Novo valor a receber</h2>
+
  <div class="panel">
-  <label>Descrição / cliente</label><input id="descReceber" placeholder="Ex: Vídeo para cliente">
-  <label>Valor (R$)</label><input id="valorReceber" type="number" min="0.01" step="0.01">
-  <label>Data prevista para receber</label><input id="dataReceber" type="date">
-  <button class="action" onclick="adicionarReceber()">Cadastrar valor a receber</button>
+
+  <label>Nome do cliente</label>
+  <input id="clienteReceber" placeholder="Ex: Prefeitura Municipal">
+
+  <label>Descrição do serviço / recebimento</label>
+  <input id="descReceber" placeholder="Ex: Produção de vídeo institucional">
+
+  <label>Valor a receber (R$)</label>
+  <input id="valorReceber" type="number" min="0.01" step="0.01" placeholder="0,00">
+
+  <label>Data prevista para receber</label>
+  <input id="dataReceber" type="date">
+
+  <button class="action" onclick="adicionarReceber()">
+   Cadastrar recebimento
+  </button>
+
  </div>
- <h2>Minha lista a receber</h2><div class="panel" id="listaReceber"></div>
+
+ <h2>Minha lista de recebimentos</h2>
+ <div class="panel" id="listaReceber"></div>
+
 </section>
 
-<section id="cofrinho">
- <h2>Meu cofrinho</h2>
- <div class="card"><small>Saldo reservado</small><div class="value green" id="saldoCofre">R$ 0,00</div><small>Esse dinheiro continua sendo seu, apenas fica separado do caixa.</small></div>
- <h2>Movimentar dinheiro</h2>
- <div class="panel">
-  <label>Operação</label>
-  <select id="operacao"><option value="deposito">Guardar dinheiro (caixa → cofrinho)</option><option value="retirada">Retirar dinheiro (cofrinho → caixa)</option></select>
-  <label>Valor (R$)</label><input type="number" id="valorCofre" min="0.01" step="0.01">
-  <label>Descrição</label><input id="descCofre" placeholder="Ex: Dinheiro que sobrou do trabalho">
-  <button class="action" onclick="movimentarCofre()">Confirmar movimentação</button>
- </div>
- <h2>Histórico do cofrinho</h2><div class="panel" id="histCofre"></div>
-</section>
+<!-- RELATÓRIOS -->
 
-<section id="dividas">
- <h2>Minhas dívidas</h2>
+<section id="relatorios">
+
+ <h2>Relatórios financeiros</h2>
+
+ <div class="panel">
+
+  <label>Tipo de relatório</label>
+  <select id="tipoRelatorio" onchange="renderRelatorio()">
+   <option value="semana">Resumo semanal</option>
+   <option value="mes">Resumo mensal</option>
+  </select>
+
+  <label>Escolha uma data de referência</label>
+  <input type="date" id="dataReferencia" onchange="renderRelatorio()">
+
+  <div class="periodo-info" id="periodoInfo"></div>
+
+ </div>
+
  <div class="grid">
-  <div class="card"><small>Total em aberto</small><div class="value red" id="totalDividas">R$ 0,00</div></div>
-  <div class="card"><small>Parcelas cadastradas</small><div class="value" id="numDividas">0</div></div>
+
+  <div class="card">
+   <small>Total de entradas</small>
+   <div class="value green" id="relEntrada">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Total de saídas</small>
+   <div class="value red" id="relSaida">R$ 0,00</div>
+  </div>
+
+  <div class="card">
+   <small>Resultado do período</small>
+   <div class="value cyan" id="relResultado">R$ 0,00</div>
+  </div>
+
  </div>
- <h2>Cadastrar dívida</h2>
- <div class="panel">
-  <label>Descrição da dívida / compra</label><input id="nomeDivida" placeholder="Ex: Passagem aérea">
-  <label>Cartão (titular)</label><input id="titularCartao" placeholder="Ex: meu, Davi">
-  <label>Valor total (R$)</label><input id="valorDivida" type="number" min="0.01" step="0.01" placeholder="0,00">
-  <label>Quantidade de parcelas</label><input id="qtdParcelas" type="number" min="1" step="1" value="1">
-  <label>Vencimento da primeira parcela</label><input id="vencimento" type="date">
-  <p class="status">O aplicativo divide o valor automaticamente e calcula os vencimentos mensais. A compra não entra como despesa no caixa; cada parcela será lançada como despesa somente quando você marcar que pagou.</p>
-  <button class="action" onclick="adicionarDivida()">Cadastrar dívida</button>
- </div>
- <h2>Dívidas cadastradas</h2><div class="panel" id="listaDividas"></div>
+
+ <h2>Movimentações do período</h2>
+ <div class="panel" id="relHistorico"></div>
+
 </section>
 
-<section id="contas">
- <h2>Contas fixas</h2>
- <div class="panel">
-  <label>Nome da conta</label><input id="nomeConta" placeholder="Ex: Internet">
-  <label>Valor (R$)</label><input id="valorConta" type="number" min="0.01" step="0.01">
-  <label>Dia do vencimento</label><input id="diaConta" type="number" min="1" max="31" placeholder="Ex: 10">
-  <button class="action" onclick="adicionarConta()">Adicionar conta</button>
- </div>
- <div class="panel" id="listaContas"></div>
-</section>
-
-<section id="metas">
- <h2>Meus sonhos e objetivos</h2>
- <div class="panel">
-  <label>Nome da meta</label><input id="nomeMeta" placeholder="Ex: Trocar de carro">
-  <label>Valor desejado (R$)</label><input id="valorMeta" type="number" min="0.01" step="0.01">
-  <button class="action" onclick="adicionarMeta()">Criar meta</button>
- </div>
- <div id="listaMetas"></div>
-</section>
+<!-- BACKUP -->
 
 <section id="backup">
+
  <h2>Segurança dos meus dados</h2>
+
  <div class="panel">
-  <p>Faça backups regularmente para não perder suas informações.</p>
-  <button class="action" onclick="exportar()">Baixar backup dos meus dados</button>
+
+  <p>Faça backups regularmente para proteger suas informações financeiras.</p>
+
+  <button class="action" onclick="exportar()">
+   Baixar backup dos meus dados
+  </button>
+
   <hr>
+
   <label>Restaurar backup (.json)</label>
   <input type="file" id="arquivoBackup" accept=".json,application/json">
-  <button class="action" onclick="importar()">Restaurar dados do arquivo</button>
+
+  <button class="action" onclick="importar()">
+   Restaurar dados do arquivo
+  </button>
+
   <hr>
-  <p class="status">O backup do Google Drive fica no painel Início, depois do histórico. Os dados continuam salvos neste navegador também.</p>
-  <button class="secondary" onclick="conectarDrive()">Conectar / reconectar Google Drive</button>
-  <button class="danger" onclick="limpar()" style="width:100%;margin-top:12px">Apagar todos os dados</button>
+
+  <div class="drive-head">
+   <div class="drive-icon">☁️</div>
+   <div>
+    <strong>Backup na nuvem</strong>
+    <div class="status" id="driveStatus">Ainda não conectado.</div>
+   </div>
+  </div>
+
+  <div class="drive-actions">
+   <button class="action" id="btnConectar" onclick="conectarDrive()">
+    Conectar Google Drive
+   </button>
+
+   <button class="secondary" onclick="backupDrive()">
+    Backup agora
+   </button>
+  </div>
+
+  <div class="status">
+   Com o Drive conectado, o aplicativo tenta salvar uma cópia automaticamente após alterações. Também é possível fazer backup manualmente.
+  </div>
+
+  <hr>
+
+  <h2>Histórico de backups</h2>
+
+  <div class="status" id="driveHistoryStatus">
+   Conecte o Google Drive para visualizar os backups.
+  </div>
+
+  <div id="historicoDrive">
+   <div class="empty">Nenhum backup carregado.</div>
+  </div>
+
+  <hr>
+
+  <button class="danger" onclick="limpar()" style="width:100%">
+   Apagar todos os dados
+  </button>
+
  </div>
+
 </section>
+
 </main>
-<footer>ADF MEU FINANCEIRO • Controle, organização e conquistas.</footer>
+
+<footer>
+ ADF MEU FINANCEIRO • Controle, organização e conquistas.
+</footer>
 
 <script>
+
+/* CONFIGURAÇÕES E DADOS */
+
 const KEY='adf_financeiro_v1';
+
 const GOOGLE_CLIENT_ID='946117596222-iev0tmt9k1lg3pkc06i6gsjkdbf7u8ll.apps.googleusercontent.com';
+
 const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
+
 const $=id=>document.getElementById(id);
 
 let db;
-try{db=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){db=null}
+
+try{
+ db=JSON.parse(localStorage.getItem(KEY)||'null');
+}catch(e){
+ db=null;
+}
+
 if(!db||typeof db!=='object')db={};
-['lancamentos','cofre','dividas','contas','metas','receber'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});
+
+if(!Array.isArray(db.lancamentos))db.lancamentos=[];
+if(!Array.isArray(db.receber))db.receber=[];
+
+/* Preserva os dados antigos do usuário.
+   As áreas antigas deixam de aparecer na interface,
+   mas seus registros não são apagados do armazenamento. */
+
+['cofre','dividas','contas','metas'].forEach(k=>{
+ if(!Array.isArray(db[k]))db[k]=[];
+});
+
+/* Compatibilidade com recebimentos antigos */
+
+db.receber.forEach(x=>{
+ if(typeof x.cliente!=='string')x.cliente='';
+ if(typeof x.recebido!=='boolean')x.recebido=false;
+});
+
+/* Datas locais */
+
+function dataHoje(){
+ let d=new Date();
+ let ano=d.getFullYear();
+ let mes=String(d.getMonth()+1).padStart(2,'0');
+ let dia=String(d.getDate()).padStart(2,'0');
+ return ano+'-'+mes+'-'+dia;
+}
+
+$('dataEntrada').value=dataHoje();
+$('dataSaida').value=dataHoje();
+$('dataReceber').value=dataHoje();
+$('dataReferencia').value=dataHoje();
+
+function dataLocal(s){
+ if(!s)return new Date();
+ return new Date(s+'T12:00:00');
+}
+
+function dinheiro(v){
+ return Number(v||0).toLocaleString('pt-BR',{
+  style:'currency',
+  currency:'BRL'
+ });
+}
+
+function esc(s){
+ return String(s??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+function salvar(fazerBackup=true){
+ localStorage.setItem(KEY,JSON.stringify(db));
+ render();
+
+ if(fazerBackup&&driveToken){
+  clearTimeout(backupTimer);
+  backupTimer=setTimeout(()=>backupDrive(true),5000);
+ }
+}
+
+/* NAVEGAÇÃO */
+
+function tab(id,btn){
+ document.querySelectorAll('section').forEach(s=>{
+  s.classList.remove('active');
+ });
+
+ $(id).classList.add('active');
+
+ document.querySelectorAll('nav button').forEach(b=>{
+  b.classList.remove('active');
+ });
+
+ btn.classList.add('active');
+
+ render();
+}
+
+/* LANÇAMENTOS */
+
+function soma(arr,tipo){
+ return arr.filter(x=>!tipo||x.tipo===tipo)
+  .reduce((s,x)=>s+Number(x.valor||0),0);
+}
+
+function caixaAtual(){
+ return soma(db.lancamentos,'entrada')-
+        soma(db.lancamentos,'saida');
+}
+
+function adicionarEntrada(){
+ let descricao=$('descEntrada').value.trim();
+ let valor=Number($('valorEntrada').value);
+ let data=$('dataEntrada').value||dataHoje();
+
+ if(!descricao||valor<=0){
+  return alert('Informe a descrição e um valor válido.');
+ }
+
+ db.lancamentos.push({
+  id:Date.now(),
+  tipo:'entrada',
+  descricao,
+  valor,
+  categoria:'Entrada',
+  data,
+  obs:''
+ });
+
+ $('descEntrada').value='';
+ $('valorEntrada').value='';
+ $('dataEntrada').value=dataHoje();
+
+ salvar();
+ alert('Entrada registrada com sucesso!');
+}
+
+function adicionarSaida(){
+ let descricao=$('descSaida').value.trim();
+ let valor=Number($('valorSaida').value);
+ let categoria=$('categoriaSaida').value;
+ let data=$('dataSaida').value||dataHoje();
+
+ if(!descricao||valor<=0){
+  return alert('Informe a descrição e um valor válido.');
+ }
+
+ db.lancamentos.push({
+  id:Date.now(),
+  tipo:'saida',
+  descricao,
+  valor,
+  categoria,
+  data,
+  obs:''
+ });
+
+ $('descSaida').value='';
+ $('valorSaida').value='';
+ $('dataSaida').value=dataHoje();
+
+ salvar();
+ alert('Saída registrada com sucesso!');
+}
+
+function excluirLancamento(id){
+ if(!confirm('Deseja realmente excluir este lançamento?'))return;
+
+ db.lancamentos=db.lancamentos.filter(x=>String(x.id)!==String(id));
+
+ salvar();
+}
+
+/* A RECEBER */
+
+function adicionarReceber(){
+ let cliente=$('clienteReceber').value.trim();
+ let descricao=$('descReceber').value.trim();
+ let valor=Number($('valorReceber').value);
+ let data=$('dataReceber').value||dataHoje();
+
+ if(!cliente||!descricao||valor<=0){
+  return alert('Informe o cliente, a descrição e um valor válido.');
+ }
+
+ db.receber.push({
+  id:Date.now(),
+  cliente,
+  descricao,
+  valor,
+  data,
+  recebido:false
+ });
+
+ $('clienteReceber').value='';
+ $('descReceber').value='';
+ $('valorReceber').value='';
+ $('dataReceber').value=dataHoje();
+
+ salvar();
+
+ alert('Valor cadastrado em A Receber!');
+}
+
+function marcarRecebido(id){
+ let x=db.receber.find(y=>String(y.id)===String(id));
+
+ if(!x||x.recebido)return;
+
+ if(!confirm(
+  'Confirmar o recebimento de '+dinheiro(x.valor)+
+  ' de '+x.cliente+'?\n\n'+
+  'O valor será lançado automaticamente na Entrada.'
+ ))return;
+
+ let data=dataHoje();
+
+ x.recebido=true;
+ x.dataRecebimento=data;
+
+ db.lancamentos.push({
+  id:Date.now(),
+  tipo:'entrada',
+  descricao:x.cliente+' - '+x.descricao,
+  valor:Number(x.valor),
+  categoria:'Recebimento',
+  data,
+  obs:'Recebimento automático da área A Receber.',
+  recebimentoId:x.id
+ });
+
+ salvar();
+
+ alert('Recebimento confirmado e lançado na Entrada!');
+}
+
+function excluirReceber(id){
+ let x=db.receber.find(y=>String(y.id)===String(id));
+
+ if(!x)return;
+
+ if(!confirm('Deseja excluir este recebimento?'))return;
+
+ db.receber=db.receber.filter(y=>String(y.id)!==String(id));
+
+ salvar();
+}
+
+/* HISTÓRICOS */
+
+function listaLancamentos(arr){
+ return arr.map(x=>
+  '<div class="item">'+
+  '<button class="danger" onclick="excluirLancamento('+Number(x.id)+')">Excluir</button>'+
+  '<strong>'+esc(x.descricao)+'</strong>'+
+  '<small>'+esc(x.data||'')+' • '+esc(x.categoria||'')+'</small>'+
+  '<div class="'+(x.tipo==='entrada'?'green':'red')+'">'+
+  (x.tipo==='entrada'?'+ ':'− ')+dinheiro(x.valor)+
+  '</div>'+
+  '</div>'
+ ).join('')||'<div class="empty">Nenhum lançamento cadastrado.</div>';
+}
+
+/* RELATÓRIOS */
+
+function inicioSemana(data){
+ let d=dataLocal(data);
+ let dia=d.getDay();
+ d.setDate(d.getDate()-(dia===0?6:dia-1));
+ return d;
+}
+
+function formatarData(d){
+ return d.toLocaleDateString('pt-BR');
+}
+
+function renderRelatorio(){
+ let tipo=$('tipoRelatorio').value;
+ let referencia=$('dataReferencia').value||dataHoje();
+
+ let inicio,fim;
+
+ if(tipo==='semana'){
+  inicio=inicioSemana(referencia);
+  fim=new Date(inicio);
+  fim.setDate(fim.getDate()+6);
+
+  $('periodoInfo').textContent=
+   'Semana de '+formatarData(inicio)+' até '+formatarData(fim);
+
+ }else{
+  let d=dataLocal(referencia);
+  inicio=new Date(d.getFullYear(),d.getMonth(),1,12);
+  fim=new Date(d.getFullYear(),d.getMonth()+1,0,12);
+
+  $('periodoInfo').textContent=
+   'Mês de '+d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+ }
+
+ let inicioStr=anoMesDia(inicio);
+ let fimStr=anoMesDia(fim);
+
+ let movimentos=db.lancamentos.filter(x=>
+  String(x.data||'')>=inicioStr&&String(x.data||'')<=fimStr
+ );
+
+ let entradas=soma(movimentos,'entrada');
+ let saidas=soma(movimentos,'saida');
+
+ $('relEntrada').textContent=dinheiro(entradas);
+ $('relSaida').textContent=dinheiro(saidas);
+ $('relResultado').textContent=dinheiro(entradas-saidas);
+
+ $('relHistorico').innerHTML=listaLancamentos(
+  movimentos.slice().sort((a,b)=>
+   String(b.data).localeCompare(String(a.data))
+  )
+ );
+}
+
+function anoMesDia(d){
+ return d.getFullYear()+'-'+
+  String(d.getMonth()+1).padStart(2,'0')+'-'+
+  String(d.getDate()).padStart(2,'0');
+}
+
+/* ATUALIZAÇÃO DA INTERFACE */
+
+function render(){
+
+ let entradas=soma(db.lancamentos,'entrada');
+ let saidas=soma(db.lancamentos,'saida');
+
+ let caixa=caixaAtual();
+
+ let agora=dataHoje();
+ let hoje=dataLocal(agora);
+
+ let primeiroMes=anoMesDia(
+  new Date(hoje.getFullYear(),hoje.getMonth(),1,12)
+ );
+
+ let ultimoMes=anoMesDia(
+  new Date(hoje.getFullYear(),hoje.getMonth()+1,0,12)
+ );
+
+ let movimentosMes=db.lancamentos.filter(x=>
+  String(x.data||'')>=primeiroMes&&String(x.data||'')<=ultimoMes
+ );
+
+ let entradaMes=soma(movimentosMes,'entrada');
+ let saidaMes=soma(movimentosMes,'saida');
+
+ let inicio=inicioSemana(agora);
+ let inicioStr=anoMesDia(inicio);
+
+ let semana=db.lancamentos.filter(x=>
+  String(x.data||'')>=inicioStr&&String(x.data||'')<=agora
+ );
+
+ let se=soma(semana,'entrada');
+ let ss=soma(semana,'saida');
+
+ let pendentes=db.receber.filter(x=>!x.recebido);
+
+ let aReceber=pendentes.reduce(
+  (s,x)=>s+Number(x.valor||0),0
+ );
+
+ $('caixa').textContent=dinheiro(caixa);
+ $('entradaMes').textContent=dinheiro(entradaMes);
+ $('saidaMes').textContent=dinheiro(saidaMes);
+ $('resultadoMes').textContent=dinheiro(entradaMes-saidaMes);
+ $('painelReceber').textContent=dinheiro(aReceber);
+
+ $('semEntrada').textContent=dinheiro(se);
+ $('semSaida').textContent=dinheiro(ss);
+ $('semResultado').textContent=dinheiro(se-ss);
+
+ $('historicoEntrada').innerHTML=listaLancamentos(
+  db.lancamentos
+   .filter(x=>x.tipo==='entrada')
+   .slice()
+   .sort((a,b)=>String(b.data).localeCompare(String(a.data)))
+ );
+
+ $('historicoSaida').innerHTML=listaLancamentos(
+  db.lancamentos
+   .filter(x=>x.tipo==='saida')
+   .slice()
+   .sort((a,b)=>String(b.data).localeCompare(String(a.data)))
+ );
+
+ $('ultimos').innerHTML=listaLancamentos(
+  db.lancamentos
+   .slice()
+   .sort((a,b)=>String(b.data).localeCompare(String(a.data)))
+   .slice(0,5)
+ );
+
+ $('listaReceber').innerHTML=pendentes
+  .concat(db.receber.filter(x=>x.recebido))
+  .sort((a,b)=>String(a.data).localeCompare(String(b.data)))
+  .map(x=>
+   '<div class="item">'+
+   '<button class="danger" onclick="excluirReceber('+Number(x.id)+')">Excluir</button>'+
+   '<strong>'+esc(x.cliente||'Cliente não informado')+'</strong>'+
+   '<small>'+esc(x.descricao)+'</small>'+
+   '<p class="blue">'+dinheiro(x.valor)+'</p>'+
+   '<small>Previsão: '+esc(x.data||'Não informada')+'</small>'+
+   (x.recebido?
+    '<p class="green">✓ Recebido em '+esc(x.dataRecebimento||'')+'</p>':
+    '<button class="action" onclick="marcarRecebido('+Number(x.id)+')">Marcar como recebido</button>'
+   )+
+   '</div>'
+  ).join('')||'<div class="empty">Nenhum valor cadastrado.</div>';
+
+ $('resumoReceber').innerHTML=pendentes.slice(0,5).map(x=>
+  '<div class="item">'+
+  '<strong>'+esc(x.cliente||'Cliente não informado')+'</strong>'+
+  '<small>'+esc(x.descricao)+' • Previsão: '+esc(x.data)+'</small>'+
+  '<div class="blue">'+dinheiro(x.valor)+'</div>'+
+  '</div>'
+ ).join('')||'<div class="empty">Nenhum recebimento pendente.</div>';
+
+ renderRelatorio();
+}
+
+/* BACKUP LOCAL */
+
+function exportar(){
+ let blob=new Blob(
+  [JSON.stringify(db,null,2)],
+  {type:'application/json'}
+ );
+
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement('a');
+
+ a.href=url;
+ a.download='ADF-meu-financeiro-backup.json';
+ a.click();
+
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function importar(){
+ let f=$('arquivoBackup').files[0];
+
+ if(!f)return alert('Selecione um arquivo.');
+
+ let r=new FileReader();
+
+ r.onload=()=>{
+  try{
+   let novo=JSON.parse(r.result);
+
+   if(!novo||!Array.isArray(novo.lancamentos)){
+    throw Error('Arquivo inválido.');
+   }
+
+   if(!Array.isArray(novo.receber))novo.receber=[];
+
+   ['cofre','dividas','contas','metas'].forEach(k=>{
+    if(!Array.isArray(novo[k]))novo[k]=[];
+   });
+
+   novo.receber.forEach(x=>{
+    if(typeof x.cliente!=='string')x.cliente='';
+    if(typeof x.recebido!=='boolean')x.recebido=false;
+   });
+
+   if(!confirm(
+    'Isso substituirá os dados atuais. Deseja continuar?'
+   ))return;
+
+   db=novo;
+
+   salvar(false);
+
+   alert('Backup restaurado com sucesso!');
+
+  }catch(e){
+   alert('Arquivo inválido ou incompatível.');
+  }
+ };
+
+ r.readAsText(f);
+}
+
+function limpar(){
+ if(confirm('ATENÇÃO: apagar todos os seus dados definitivamente? Faça backup antes.')){
+  if(confirm('Tem certeza absoluta?')){
+
+   db={
+    lancamentos:[],
+    receber:[],
+    cofre:[],
+    dividas:[],
+    contas:[],
+    metas:[]
+   };
+
+   salvar(false);
+  }
+ }
+}
+
+/* GOOGLE DRIVE */
 
 let driveToken=null;
 let driveFolderId=null;
@@ -241,322 +1096,39 @@ let backupTimer=null;
 let backupEmAndamento=false;
 let ultimaDataBackup='';
 
-function salvar(fazerBackup=true){
- localStorage.setItem(KEY,JSON.stringify(db));
- render();
- if(fazerBackup&&driveToken){
-  clearTimeout(backupTimer);
-  backupTimer=setTimeout(()=>backupDrive(true),5000);
- }
-}
-function dinheiro(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
-function dataHoje(){return new Date().toISOString().slice(0,10)}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-$('data').value=dataHoje();
-$('dataReceber').value=dataHoje();
-
-function tab(id,btn){
- document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
- $(id).classList.add('active');
- document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
- render();
-}
-function soma(arr,tipo){
- return arr.filter(x=>!tipo||x.tipo===tipo).reduce((s,x)=>s+Number(x.valor||0),0);
-}
-function caixaAtual(){
- return soma(db.lancamentos,'entrada')-soma(db.lancamentos,'saida')-
- soma(db.cofre.filter(x=>x.tipo==='deposito'))+
- soma(db.cofre.filter(x=>x.tipo==='retirada'));
-}
-function reservaAtual(){
- return soma(db.cofre.filter(x=>x.tipo==='deposito'))-soma(db.cofre.filter(x=>x.tipo==='retirada'));
-}
-
-function adicionar(){
- let v=Number($('valor').value),d=$('descricao').value.trim();
- if(!d||v<=0)return alert('Informe uma descrição e um valor válido.');
- db.lancamentos.push({
-  id:Date.now(),tipo:$('tipo').value,descricao:d,valor:v,
-  categoria:$('categoria').value,data:$('data').value||dataHoje(),obs:$('obs').value
- });
- ['descricao','valor','obs'].forEach(x=>$(x).value='');
- salvar();alert('Lançamento salvo!');
-}
-function excluirLancamento(id){
- if(confirm('Excluir este lançamento?')){
-  db.lancamentos=db.lancamentos.filter(x=>x.id!==id);salvar();
- }
-}
-
-function adicionarReceber(){
- let descricao=$('descReceber').value.trim(),valor=Number($('valorReceber').value);
- if(!descricao||valor<=0)return alert('Informe a descrição e um valor válido.');
- db.receber.push({id:Date.now(),descricao,valor,data:$('dataReceber').value||dataHoje(),recebido:false});
- $('descReceber').value='';$('valorReceber').value='';
- salvar();alert('Valor cadastrado em A receber.');
-}
-function marcarRecebido(id){
- let x=db.receber.find(y=>y.id===id);
- if(!x||x.recebido)return;
- if(!confirm('Confirmar que este valor foi recebido? Ele será lançado como entrada no caixa.'))return;
- x.recebido=true;
- db.lancamentos.push({id:Date.now(),tipo:'entrada',descricao:'Recebido: '+x.descricao,valor:Number(x.valor),categoria:'Recebimento',data:dataHoje(),obs:'Recebimento registrado na área A receber'});
- salvar();
-}
-function excluirReceber(id){
- if(confirm('Excluir este valor a receber?')){
-  db.receber=db.receber.filter(x=>x.id!==id);salvar();
- }
-}
-
-function movimentarCofre(){
- let v=Number($('valorCofre').value),op=$('operacao').value;
- if(v<=0)return alert('Informe um valor válido.');
- let caixa=caixaAtual(),reserva=reservaAtual();
- if(op==='deposito'&&v>caixa)return alert('Saldo disponível em caixa insuficiente.');
- if(op==='retirada'&&v>reserva)return alert('Saldo insuficiente no cofrinho.');
- db.cofre.push({id:Date.now(),tipo:op,valor:v,descricao:$('descCofre').value||'Movimentação',data:dataHoje()});
- $('valorCofre').value='';$('descCofre').value='';
- salvar();alert('Movimentação realizada!');
-}
-
-function dataParcela(primeira,indice){
- let d=new Date((primeira||dataHoje())+'T12:00:00');let dia=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+indice);let ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(dia,ultimo));return d.toISOString().slice(0,10);
-}
-function normalizarDividas(){
- db.dividas.forEach(d=>{
-  if(!Array.isArray(d.parcelas)){
-   let qtd=Math.max(1,Number(d.qtd)||1);
-   let total=Math.max(0,Number(d.valor)||0);
-   let pago=Math.max(0,Number(d.pago)||0);
-   let base=Math.floor((total/qtd)*100)/100;
-   let resto=Math.round((total-base*qtd)*100);
-   d.parcelas=Array.from({length:qtd},(_,i)=>({
-    id:String(d.id)+'-'+i,
-    valor:base+(i<resto?0.01:0),
-    vencimento:dataParcela(d.vencimento,i),
-    paga:false
-   }));
-   let rp=pago;
-   d.parcelas.forEach(p=>{
-    if(rp>=p.valor-0.001){p.paga=true;rp-=p.valor}
-    else if(rp>0){p.valorPago=rp;rp=0}
-   });
-  }
- });
-}
-normalizarDividas();
-
-function adicionarDivida(){
- let nome=$('nomeDivida').value.trim();
- let titular=$('titularCartao').value.trim()||'Não informado';
- let total=Math.round(Number($('valorDivida').value)*100);
- let qtd=Math.floor(Number($('qtdParcelas').value)||0);
- let primeira=$('vencimento').value;
- if(!nome||!total||total<1||qtd<1||qtd>240||!primeira)
-  return alert('Preencha a descrição, o valor, a quantidade de parcelas e o primeiro vencimento.');
- let base=Math.floor(total/qtd);
- let resto=total-base*qtd;
- let parcelas=Array.from({length:qtd},(_,i)=>({
-  id:String(Date.now())+'-'+i,
-  valor:(base+(i<resto?1:0))/100,
-  vencimento:dataParcela(primeira,i),
-  paga:false
- }));
- db.dividas.push({id:Date.now(),nome,tipo:'Cartão',titular,valor:total/100,parcelas});
- $('nomeDivida').value='';
- $('titularCartao').value='';
- $('valorDivida').value='';
- $('qtdParcelas').value='1';
- $('vencimento').value='';
- salvar();
- alert('Dívida cadastrada com parcelas e vencimentos automáticos!');
-}
-function pagarParcela(idDivida,idParcela){
- let d=db.dividas.find(x=>x.id===idDivida);
- let p=d&&d.parcelas.find(x=>String(x.id)===String(idParcela));
- if(!p||p.paga)return;
- if(p.valor>caixaAtual())return alert('Saldo em caixa insuficiente para pagar esta parcela.');
- if(!confirm('Confirmar pagamento de '+dinheiro(p.valor)+' da dívida “'+d.nome+'”?'))return;
- p.paga=true;
- db.lancamentos.push({
-  id:Date.now(),tipo:'saida',
-  descricao:'Parcela paga: '+d.nome+' ('+(d.titular||'Cartão')+')',
-  valor:Number(p.valor),categoria:'Cartão',data:dataHoje(),
-  obs:'Pagamento da parcela com vencimento em '+p.vencimento
- });
- salvar();
-}
-function excluirDivida(id){
- if(confirm('Excluir esta dívida e suas parcelas? Os lançamentos de pagamentos já registrados não serão apagados.')){
-  db.dividas=db.dividas.filter(x=>x.id!==id);salvar()
- }
-}
-
-function adicionarConta(){
- let nome=$('nomeConta').value.trim(),v=Number($('valorConta').value),dia=Number($('diaConta').value);
- if(!nome||v<=0||dia<1||dia>31)return alert('Confira os dados da conta.');
- db.contas.push({id:Date.now(),nome,valor:v,dia,paga:false});
- $('nomeConta').value='';$('valorConta').value='';$('diaConta').value='';
- salvar();
-}
-function marcarConta(id){
- let c=db.contas.find(x=>x.id===id);
- if(!c||c.paga)return alert('Esta conta já foi marcada como paga.');
- if(c.valor>caixaAtual())return alert('Saldo em caixa insuficiente.');
- c.paga=true;
- db.lancamentos.push({
-  id:Date.now(),tipo:'saida',descricao:'Conta fixa: '+c.nome,
-  valor:c.valor,categoria:'Contas fixas',data:dataHoje(),
-  obs:'Conta marcada como paga'
- });
- salvar();
-}
-function excluirConta(id){
- if(confirm('Excluir esta conta?')){db.contas=db.contas.filter(x=>x.id!==id);salvar()}
-}
-
-function adicionarMeta(){
- let nome=$('nomeMeta').value.trim(),v=Number($('valorMeta').value);
- if(!nome||v<=0)return alert('Informe a meta e o valor desejado.');
- db.metas.push({id:Date.now(),nome,valor:v});
- $('nomeMeta').value='';$('valorMeta').value='';
- salvar();
-}
-function excluirMeta(id){
- if(confirm('Excluir esta meta?')){db.metas=db.metas.filter(x=>x.id!==id);salvar()}
-}
-
-function listaLancamentos(arr){
- return arr.map(x=>'<div class="item"><button class="secondary" onclick="excluirLancamento('+Number(x.id)+')">Excluir</button><strong>'+esc(x.descricao)+'</strong><small>'+esc(x.data)+' • '+esc(x.categoria)+'</small><div class="'+(x.tipo==='entrada'?'green':'red')+'">'+(x.tipo==='entrada'?'+ ':'− ')+dinheiro(x.valor)+'</div></div>').join('')||'<div class="empty">Nenhum lançamento cadastrado.</div>';
-}
-
-function render(){
- let entradas=soma(db.lancamentos,'entrada'),saidas=soma(db.lancamentos,'saida');
- let caixa=caixaAtual(),reserva=reservaAtual();
- let abertas=db.dividas.reduce((s,d)=>s+(d.parcelas||[]).filter(p=>!p.paga).reduce((a,p)=>a+Number(p.valor),0),0);
- let aReceber=db.receber.filter(x=>!x.recebido).reduce((s,x)=>s+Number(x.valor),0);
- let aPagar=db.contas.filter(x=>!x.paga).reduce((s,x)=>s+Number(x.valor),0)+abertas;
-
- let agora=new Date(),inicio=new Date(agora);
- inicio.setDate(agora.getDate()-((agora.getDay()+6)%7));inicio.setHours(0,0,0,0);
- let semana=db.lancamentos.filter(x=>new Date(x.data+'T12:00:00')>=inicio);
- let se=soma(semana,'entrada'),ss=soma(semana,'saida');
-
- $('semEntrada').textContent=dinheiro(se);
- $('semSaida').textContent=dinheiro(ss);
- $('semResultado').textContent=dinheiro(se-ss);
- $('caixa').textContent=dinheiro(caixa);
- $('painelReceber').textContent=dinheiro(aReceber);
- $('painelPagar').textContent=dinheiro(aPagar);
- $('painelDividas').textContent=dinheiro(abertas);
- $('reserva').textContent=dinheiro(reserva);
- $('saldoCofre').textContent=dinheiro(reserva);
- $('totalGeral').textContent=dinheiro(caixa+reserva);
- $('totalDividas').textContent=dinheiro(abertas);
- $('numDividas').textContent=db.dividas.length;
-
- let vencimentos=[];
- db.contas.filter(c=>!c.paga).forEach(c=>{
-  let hoje=new Date(),ano=hoje.getFullYear(),mes=hoje.getMonth();
-  let dia=Math.min(Number(c.dia),new Date(ano,mes+1,0).getDate());
-  let dt=new Date(ano,mes,dia,12);
-  if(dt<new Date(ano,mes,hoje.getDate()))
-   dt=new Date(ano,mes+1,Math.min(Number(c.dia),new Date(ano,mes+2,0).getDate()),12);
-  vencimentos.push({data:dt.toISOString().slice(0,10),nome:c.nome,valor:c.valor,tipo:'Conta fixa'});
- });
- db.dividas.forEach(d=>(d.parcelas||[]).filter(p=>!p.paga).forEach(p=>
-  vencimentos.push({data:p.vencimento,nome:d.nome+' • '+(d.titular||'Cartão'),valor:p.valor,tipo:'Parcela do cartão'})
- ));
- vencimentos.sort((a,b)=>String(a.data).localeCompare(String(b.data)));
- $('planejamento').innerHTML=vencimentos.slice(0,12).map(v=>
-  '<div class="item"><strong>'+esc(v.nome)+'</strong><small>'+esc(v.tipo)+' • Vencimento: '+esc(v.data)+'</small><div class="red">'+dinheiro(v.valor)+'</div></div>'
- ).join('')||'<div class="empty">Nenhum vencimento pendente cadastrado.</div>';
-
- $('ultimos').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))).slice(0,5));
- $('historico').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))));
- $('resumo').innerHTML='<p>Entradas acumuladas: <b class="green">'+dinheiro(entradas)+'</b></p><p>Despesas acumuladas: <b class="red">'+dinheiro(saidas)+'</b></p><p>Dinheiro reservado: <b class="orange">'+dinheiro(reserva)+'</b></p><p>Valores a receber: <b class="blue">'+dinheiro(aReceber)+'</b></p>';
-
- $('listaReceber').innerHTML=db.receber.slice().sort((a,b)=>String(a.data).localeCompare(String(b.data))).map(x=>
-  '<div class="item"><button class="danger" onclick="excluirReceber('+Number(x.id)+')">Excluir</button><strong>'+esc(x.descricao)+'</strong><small>Previsão: '+esc(x.data||'Não informada')+'</small><p class="blue">'+dinheiro(x.valor)+'</p>'+
-  (x.recebido?'<span class="green">Recebido</span>':'<button class="action" onclick="marcarRecebido('+Number(x.id)+')">Marcar como recebido</button>')+'</div>'
- ).join('')||'<div class="empty">Nenhum valor cadastrado.</div>';
-
- $('histCofre').innerHTML=db.cofre.slice().reverse().map(x=>
-  '<div class="item"><strong>'+esc(x.descricao)+'</strong><small>'+esc(x.data)+' • '+(x.tipo==='deposito'?'Depósito':'Retirada')+'</small><div class="'+(x.tipo==='deposito'?'green':'orange')+'">'+dinheiro(x.valor)+'</div></div>'
- ).join('')||'<div class="empty">Nenhuma movimentação.</div>';
-
- $('listaDividas').innerHTML=db.dividas.map(d=>{
-  let parcelas=d.parcelas||[];
-  let restante=parcelas.filter(p=>!p.paga).reduce((a,p)=>a+Number(p.valor),0);
-  let pago=parcelas.filter(p=>p.paga).reduce((a,p)=>a+Number(p.valor),0);
-  let percent=d.valor?Math.min(100,pago/d.valor*100):0;
-  return '<div class="item"><button class="secondary" onclick="excluirDivida('+Number(d.id)+')">Excluir</button><strong>'+esc(d.nome)+'</strong><small>Cartão: '+esc(d.titular||'Não informado')+' • '+parcelas.length+' parcela(s)</small><p>Valor total: '+dinheiro(d.valor)+' | Pago: '+dinheiro(pago)+'</p><p class="'+(restante<=0?'green':'red')+'">Saldo devedor: '+dinheiro(restante)+' • '+(restante<=0?'Quitada':pago>0?'Parcialmente paga':'Em aberto')+'</p><div class="progress"><div style="width:'+percent+'%"></div></div>'+parcelas.map((p,i)=>'<div class="backup-row" style="padding:7px 0;border-top:1px solid #333"><span><strong>Parcela '+(i+1)+' — '+dinheiro(p.valor)+'</strong><br><small>Vencimento: '+esc(p.vencimento)+'</small></span>'+(p.paga?'<span class="green">Paga</span>':'<button class="action" style="width:auto" onclick="pagarParcela('+Number(d.id)+',&quot;'+String(p.id)+'&quot;)">Marcar paga</button>')+'</div>').join('')+'</div>';
- }).join('')||'<div class="empty">Nenhuma dívida cadastrada.</div>';
-
- $('listaContas').innerHTML=db.contas.map(x=>
-  '<div class="item"><button class="secondary" onclick="excluirConta('+Number(x.id)+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>'+dinheiro(x.valor)+' • Vence dia '+Number(x.dia)+'</p><button class="secondary" onclick="marcarConta('+Number(x.id)+')">'+(x.paga?'Paga':'Marcar como paga')+'</button></div>'
- ).join('')||'<div class="empty">Nenhuma conta cadastrada.</div>';
-
- $('listaMetas').innerHTML=db.metas.map(x=>{
-  let percent=x.valor?Math.min(100,reserva/x.valor*100):0;
-  return '<div class="panel"><button class="secondary" onclick="excluirMeta('+Number(x.id)+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>Objetivo: '+dinheiro(x.valor)+'</p><p>Progresso considerando o cofrinho: '+percent.toFixed(1)+'%</p><div class="progress"><div style="width:'+percent+'%"></div></div></div>';
- }).join('')||'<div class="empty">Crie sua primeira meta!</div>';
-}
-
-function exportar(){
- let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
- let url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='ADF-meu-financeiro-backup.json';a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-function importar(){
- let f=$('arquivoBackup').files[0];
- if(!f)return alert('Selecione um arquivo.');
- let r=new FileReader();
- r.onload=()=>{
-  try{
-   let novo=JSON.parse(r.result);
-   if(!novo||!Array.isArray(novo.lancamentos)||!Array.isArray(novo.cofre)||!Array.isArray(novo.dividas)||!Array.isArray(novo.contas)||!Array.isArray(novo.metas))throw Error();
-   ['receber'].forEach(k=>{if(!Array.isArray(novo[k]))novo[k]=[]});
-   if(!confirm('Isso substituirá os dados atuais. Continuar?'))return;
-   db=novo;normalizarDividas();salvar(false);alert('Backup restaurado!');
-  }catch(e){alert('Arquivo inválido ou incompatível.')}
- };
- r.readAsText(f);
-}
-function limpar(){
- if(confirm('ATENÇÃO: apagar todos os seus dados definitivamente? Faça backup antes.')){
-  if(confirm('Tem certeza absoluta?')){
-   db={lancamentos:[],cofre:[],dividas:[],contas:[],metas:[],receber:[]};
-   salvar(false);
-  }
- }
-}
-
-/* GOOGLE DRIVE */
 function atualizarStatus(msg){
  $('driveStatus').textContent=msg;
 }
+
 function conectarDrive(){
+
  if(!window.google||!google.accounts||!google.accounts.oauth2){
-  return alert('O serviço de login do Google ainda está carregando. Aguarde alguns segundos e tente novamente.');
+  return alert(
+   'O serviço de login do Google ainda está carregando. Aguarde alguns segundos e tente novamente.'
+  );
  }
+
  try{
+
   if(!tokenClient){
+
    tokenClient=google.accounts.oauth2.initTokenClient({
+
     client_id:GOOGLE_CLIENT_ID,
     scope:DRIVE_SCOPE,
+
     callback:async resposta=>{
+
      if(resposta.error){
       atualizarStatus('Não foi possível conectar. Tente novamente.');
       alert('O Google não autorizou a conexão: '+resposta.error);
       return;
      }
+
      driveToken=resposta.access_token;
+
      atualizarStatus('Conectado ao Google Drive. Preparando a pasta de backup...');
+
      try{
       await garantirPastaDrive();
       await backupDrive(false);
@@ -567,110 +1139,280 @@ function conectarDrive(){
     }
    });
   }
+
   tokenClient.requestAccessToken({prompt:''});
- }catch(e){alert('Erro ao iniciar a conexão com o Google.')}
+
+ }catch(e){
+  alert('Erro ao iniciar a conexão com o Google.');
+ }
 }
+
 async function driveFetch(url,options={}){
- if(!driveToken)throw new Error('Conecte novamente o Google Drive.');
- options.headers=Object.assign({},options.headers||{},{Authorization:'Bearer '+driveToken});
+
+ if(!driveToken){
+  throw new Error('Conecte novamente o Google Drive.');
+ }
+
+ options.headers=Object.assign(
+  {},
+  options.headers||{},
+  {Authorization:'Bearer '+driveToken}
+ );
+
  let resposta=await fetch(url,options);
+
  if(resposta.status===401){
   driveToken=null;
   atualizarStatus('A conexão expirou. Toque em Conectar Google Drive novamente.');
   throw new Error('A conexão com o Google expirou. Reconecte o Drive.');
  }
+
  if(!resposta.ok){
   let detalhe='';
-  try{detalhe=(await resposta.json()).error.message}catch(e){}
-  throw new Error(detalhe||('Erro do Google Drive ('+resposta.status+').'));
+
+  try{
+   detalhe=(await resposta.json()).error.message;
+  }catch(e){}
+
+  throw new Error(
+   detalhe||('Erro do Google Drive ('+resposta.status+').')
+  );
  }
+
  if(resposta.status===204)return null;
+
  return resposta.json();
 }
+
 async function garantirPastaDrive(){
+
  if(driveFolderId)return driveFolderId;
+
  const nome='ADF MEU FINANCEIRO - BACKUPS';
- const q=encodeURIComponent("name='"+nome+"' and mimeType='application/vnd.google-apps.folder' and trashed=false");
- const resultado=await driveFetch('https://www.googleapis.com/drive/v3/files?q='+q+'&fields=files(id,name)');
+
+ const q=encodeURIComponent(
+  "name='"+nome+"' and mimeType='application/vnd.google-apps.folder' and trashed=false"
+ );
+
+ const resultado=await driveFetch(
+  'https://www.googleapis.com/drive/v3/files?q='+q+'&fields=files(id,name)'
+ );
+
  if(resultado.files&&resultado.files.length){
   driveFolderId=resultado.files[0].id;
   return driveFolderId;
  }
- const pasta=await driveFetch('https://www.googleapis.com/drive/v3/files',{
-  method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({name:nome,mimeType:'application/vnd.google-apps.folder'})
- });
+
+ const pasta=await driveFetch(
+  'https://www.googleapis.com/drive/v3/files',
+  {
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({
+    name:nome,
+    mimeType:'application/vnd.google-apps.folder'
+   })
+  }
+ );
+
  driveFolderId=pasta.id;
+
  return driveFolderId;
 }
+
 function nomeArquivoBackup(){
+
  let d=new Date();
+
  let p=n=>String(n).padStart(2,'0');
- return 'ADF-backup-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+'-'+p(d.getMinutes())+'-'+p(d.getSeconds())+'.json';
+
+ return 'ADF-backup-'+
+  d.getFullYear()+'-'+
+  p(d.getMonth()+1)+'-'+
+  p(d.getDate())+'-'+
+  p(d.getHours())+'-'+
+  p(d.getMinutes())+'-'+
+  p(d.getSeconds())+'.json';
 }
+
 async function backupDrive(automatico=false){
+
  if(!driveToken){
-  if(!automatico)alert('Primeiro conecte sua conta Google Drive.');
+  if(!automatico){
+   alert('Primeiro conecte sua conta Google Drive.');
+  }
   return;
  }
+
  if(backupEmAndamento)return;
+
  backupEmAndamento=true;
+
  try{
-  atualizarStatus(automatico?'Salvando backup automático...':'Enviando backup para o Google Drive...');
+
+  atualizarStatus(
+   automatico?
+   'Salvando backup automático...':
+   'Enviando backup para o Google Drive...'
+  );
+
   await garantirPastaDrive();
+
   const boundary='adf_boundary_'+Date.now();
-  const metadata={name:nomeArquivoBackup(),mimeType:'application/json',parents:[driveFolderId]};
+
+  const metadata={
+   name:nomeArquivoBackup(),
+   mimeType:'application/json',
+   parents:[driveFolderId]
+  };
+
   const conteudo=JSON.stringify(db,null,2);
-  const corpo='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(metadata)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n'+conteudo+'\r\n--'+boundary+'--';
-  await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{
-   method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body:corpo
-  });
+
+  const corpo=
+   '--'+boundary+'\r\n'+
+   'Content-Type: application/json; charset=UTF-8\r\n\r\n'+
+   JSON.stringify(metadata)+'\r\n'+
+   '--'+boundary+'\r\n'+
+   'Content-Type: application/json\r\n\r\n'+
+   conteudo+'\r\n'+
+   '--'+boundary+'--';
+
+  await driveFetch(
+   'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+   {
+    method:'POST',
+    headers:{
+     'Content-Type':'multipart/related; boundary='+boundary
+    },
+    body:corpo
+   }
+  );
+
   ultimaDataBackup=new Date().toLocaleString('pt-BR');
-  atualizarStatus('Backup salvo no Google Drive. Último backup: '+ultimaDataBackup);
+
+  atualizarStatus(
+   'Backup salvo no Google Drive. Último backup: '+ultimaDataBackup
+  );
+
   await carregarHistoricoDrive();
+
  }catch(e){
+
   atualizarStatus(e.message);
-  if(!automatico)alert('Não foi possível fazer o backup: '+e.message);
+
+  if(!automatico){
+   alert('Não foi possível fazer o backup: '+e.message);
+  }
+
  }finally{
+
   backupEmAndamento=false;
+
  }
 }
+
 async function carregarHistoricoDrive(){
+
  if(!driveToken||!driveFolderId)return;
+
  try{
-  const q=encodeURIComponent("'"+driveFolderId+"' in parents and trashed=false");
-  const dados=await driveFetch('https://www.googleapis.com/drive/v3/files?q='+q+'&orderBy=createdTime desc&pageSize=100&fields=files(id,name,createdTime,size)');
+
+  const q=encodeURIComponent(
+   "'"+driveFolderId+"' in parents and trashed=false"
+  );
+
+  const dados=await driveFetch(
+   'https://www.googleapis.com/drive/v3/files?q='+q+
+   '&orderBy=createdTime desc&pageSize=100&fields=files(id,name,createdTime,size)'
+  );
+
   let arquivos=dados.files||[];
-  arquivos.sort((a,b)=>new Date(b.createdTime)-new Date(a.createdTime));
-  $('driveHistoryStatus').textContent=arquivos.length+' backup(s) encontrado(s) no Google Drive. São mantidos os 30 mais recentes.';
+
+  arquivos.sort((a,b)=>
+   new Date(b.createdTime)-new Date(a.createdTime)
+  );
+
+  $('driveHistoryStatus').textContent=
+   arquivos.length+' backup(s) encontrado(s) no Google Drive. São mantidos os 30 mais recentes.';
+
   $('historicoDrive').innerHTML=arquivos.slice(0,30).map(f=>{
+
    let nome=esc(f.name);
    let data=new Date(f.createdTime).toLocaleString('pt-BR');
-   return '<div class="item backup-row"><span><strong>'+nome+'</strong><br>'+data+'</span><button class="secondary" onclick="restaurarDrive(\''+f.id+'\')">Restaurar</button></div>';
+
+   return '<div class="item backup-row">'+
+    '<span><strong>'+nome+'</strong><br>'+data+'</span>'+
+    '<button class="secondary" onclick="restaurarDrive(\''+f.id+'\')">Restaurar</button>'+
+    '</div>';
+
   }).join('')||'<div class="empty">Nenhum backup encontrado ainda.</div>';
+
   if(arquivos.length>30){
+
    for(const antigo of arquivos.slice(30)){
-    await driveFetch('https://www.googleapis.com/drive/v3/files/'+antigo.id,{method:'DELETE'});
+    await driveFetch(
+     'https://www.googleapis.com/drive/v3/files/'+antigo.id,
+     {method:'DELETE'}
+    );
    }
-   $('driveHistoryStatus').textContent='Histórico organizado: 30 backups mais recentes mantidos.';
+
+   $('driveHistoryStatus').textContent=
+    'Histórico organizado: 30 backups mais recentes mantidos.';
   }
+
  }catch(e){
-  $('driveHistoryStatus').textContent='Não foi possível carregar o histórico: '+e.message;
+
+  $('driveHistoryStatus').textContent=
+   'Não foi possível carregar o histórico: '+e.message;
+
  }
 }
+
 async function restaurarDrive(id){
- if(!confirm('Restaurar este backup? Os dados atuais do aplicativo serão substituídos. Se quiser, faça um backup atual antes.'))return;
+
+ if(!confirm(
+  'Restaurar este backup? Os dados atuais do aplicativo serão substituídos. Se quiser, faça um backup atual antes.'
+ ))return;
+
  try{
-  const dados=await driveFetch('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media');
-  if(!dados||!Array.isArray(dados.lancamentos)||!Array.isArray(dados.cofre)||!Array.isArray(dados.dividas)||!Array.isArray(dados.contas)||!Array.isArray(dados.metas))throw new Error('Este arquivo não parece ser um backup válido do ADF.');
+
+  const dados=await driveFetch(
+   'https://www.googleapis.com/drive/v3/files/'+id+'?alt=media'
+  );
+
+  if(!dados||!Array.isArray(dados.lancamentos)){
+   throw new Error('Este arquivo não parece ser um backup válido do ADF.');
+  }
+
   if(!Array.isArray(dados.receber))dados.receber=[];
+
+  ['cofre','dividas','contas','metas'].forEach(k=>{
+   if(!Array.isArray(dados[k]))dados[k]=[];
+  });
+
+  dados.receber.forEach(x=>{
+   if(typeof x.cliente!=='string')x.cliente='';
+   if(typeof x.recebido!=='boolean')x.recebido=false;
+  });
+
   db=dados;
-  normalizarDividas();
+
   salvar(false);
+
   alert('Backup restaurado com sucesso!');
- }catch(e){alert('Não foi possível restaurar: '+e.message)}
+
+ }catch(e){
+
+  alert('Não foi possível restaurar: '+e.message);
+
+ }
 }
+
+/* INICIALIZAÇÃO */
+
 render();
+
 </script>
+
 </body>
 </html>
