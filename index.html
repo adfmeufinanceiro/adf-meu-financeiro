@@ -4,359 +4,331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101010">
+<meta name="theme-color" content="#111111">
 <title>ADF Meu Financeiro</title>
 <style>
-:root{--bg:#101010;--panel:#1b1b1b;--panel2:#242424;--orange:#ff8a00;--text:#f5f5f5;--muted:#aaa;--green:#35c982;--red:#ff6262}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-header{padding:23px 18px;background:#090909;border-bottom:1px solid #333}
-.logo{font-size:27px;font-weight:900;letter-spacing:2px;color:var(--orange)}
-.sublogo{font-size:10px;letter-spacing:3px;color:#ddd;margin-top:3px}
-header p{font-size:12px;color:var(--muted);margin:12px 0 0}
-main{max-width:1000px;margin:auto;padding:16px}
-nav{display:flex;gap:7px;overflow-x:auto;padding:5px 0 15px}
-nav button{white-space:nowrap;background:#252525;color:#ddd;border:1px solid #383838;padding:11px 14px;border-radius:9px}
-nav button.active{background:var(--orange);color:#111;border-color:var(--orange);font-weight:bold}
-h2{font-size:20px;margin:12px 0 15px}
-h3{font-size:15px;margin:0 0 12px}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.card,.panel{background:var(--panel);border:1px solid #303030;border-radius:12px;padding:15px;margin-bottom:12px}
-.card small{color:var(--muted);font-size:11px}
-.card strong{display:block;font-size:21px;margin-top:9px;overflow-wrap:anywhere}
-.orange{color:var(--orange)}.green{color:var(--green)}.red{color:var(--red)}
-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field.full{grid-column:1/-1}
-label{font-size:12px;color:#bbb}
-input,select,textarea{width:100%;background:#101010;color:white;border:1px solid #414141;border-radius:8px;padding:12px;font-size:14px;min-width:0}
+body{margin:0;background:#101010;color:#f5f5f5;font-family:Arial,sans-serif}
+header{background:#191919;padding:22px 16px;border-bottom:1px solid #333}
+.logo{font-size:25px;font-weight:bold;letter-spacing:2px}
+.logo span{color:#f59e0b}
+header small{color:#aaa}
+main{padding:16px;max-width:850px;margin:auto}
+h2{font-size:19px;margin:24px 0 12px}
+h3{font-size:15px;color:#ddd}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{background:#1c1c1c;border:1px solid #303030;border-radius:12px;padding:15px}
+.card small{color:#aaa}
+.value{font-size:21px;font-weight:bold;margin-top:9px;overflow-wrap:anywhere}
+.green{color:#4ade80}
+.red{color:#fb7185}
+.orange{color:#f59e0b}
+.blue{color:#60a5fa}
+nav{display:flex;gap:7px;overflow-x:auto;padding:12px 0}
+nav button{white-space:nowrap;background:#292929;color:white;border:0;border-radius:8px;padding:11px}
 button{cursor:pointer}
-.primary{background:var(--orange);color:#111;border:0;border-radius:8px;padding:13px;font-weight:bold}
-.secondary{background:#333;color:white;border:1px solid #555;border-radius:8px;padding:10px}
-.danger{background:#442323;color:#ffaaaa;border:1px solid #744;padding:8px 10px;border-radius:7px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.item{border-bottom:1px solid #333;padding:12px 0;display:flex;justify-content:space-between;gap:12px;align-items:center}
+nav button.active,.primary{background:#d97706;color:#111;font-weight:bold}
+section{display:none}
+section.active{display:block}
+.panel{background:#1c1c1c;border:1px solid #333;border-radius:12px;padding:15px;margin-bottom:13px}
+input,select,textarea{width:100%;padding:12px;background:#292929;border:1px solid #444;border-radius:8px;color:white;margin:6px 0 12px;font-size:15px}
+label{font-size:13px;color:#bbb}
+button.action{padding:12px;border:0;border-radius:8px;background:#d97706;color:#111;font-weight:bold;width:100%;margin-top:5px}
+button.secondary{background:#333;color:white;padding:9px;border:0;border-radius:7px}
+.item{border-bottom:1px solid #333;padding:12px 0}
 .item:last-child{border:0}
-.item small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
-.item strong{overflow-wrap:anywhere}
-.empty{color:var(--muted);font-size:13px;padding:12px 0}
-.tag{font-size:10px;background:#333;padding:4px 7px;border-radius:5px;color:#ddd}
-.hidden{display:none!important}
-.note{font-size:12px;color:var(--muted);line-height:1.5}
-.progress{height:9px;background:#383838;border-radius:10px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:var(--orange);width:0}
-hr{border:0;border-top:1px solid #333;margin:15px 0}
-footer{text-align:center;color:#777;font-size:11px;padding:25px}
-@media(min-width:650px){.cards{grid-template-columns:repeat(4,1fr)}main{padding:24px}header{padding-left:max(20px,calc((100% - 950px)/2))}}
+.item strong{display:block;margin-bottom:5px}
+.item small{color:#aaa}
+.item button{float:right}
+.empty{color:#888;text-align:center;padding:20px}
+.progress{height:9px;background:#333;border-radius:9px;margin:10px 0}
+.progress div{height:100%;background:#f59e0b;border-radius:9px}
+footer{text-align:center;color:#666;padding:30px;font-size:12px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">ADF</div>
-  <div class="sublogo">ANDERSON DUARTE FILMES</div>
-  <p>Meu Financeiro · Organização e planejamento pessoal</p>
+ <div class="logo"><span>ADF</span> MEU FINANCEIRO</div>
+ <small>Organização financeira pessoal</small>
 </header>
-
 <main>
 <nav>
-<button class="active" data-tab="inicio">Início</button>
-<button data-tab="movimentos">Lançamentos</button>
-<button data-tab="receber">A receber</button>
-<button data-tab="dividas">Dívidas</button>
-<button data-tab="metas">Metas</button>
-<button data-tab="relatorios">Relatórios</button>
-<button data-tab="backup">Backup</button>
+ <button class="active" onclick="tab('inicio',this)">Início</button>
+ <button onclick="tab('lancamentos',this)">Lançamentos</button>
+ <button onclick="tab('cofrinho',this)">Cofrinho</button>
+ <button onclick="tab('dividas',this)">Dívidas</button>
+ <button onclick="tab('contas',this)">Contas</button>
+ <button onclick="tab('metas',this)">Metas</button>
+ <button onclick="tab('backup',this)">Backup</button>
 </nav>
 
-<section id="inicio">
-<h2>Visão geral</h2>
-<div class="cards">
-<div class="card"><small>Saldo disponível registrado</small><strong id="saldo">R$ 0,00</strong></div>
-<div class="card"><small>Receitas recebidas no mês</small><strong class="green" id="receitasMes">R$ 0,00</strong></div>
-<div class="card"><small>Despesas pagas no mês</small><strong class="red" id="despesasMes">R$ 0,00</strong></div>
-<div class="card"><small>Resultado do mês</small><strong id="resultadoMes">R$ 0,00</strong></div>
-<div class="card"><small>Total a receber</small><strong class="orange" id="totalReceber">R$ 0,00</strong></div>
-<div class="card"><small>Total das dívidas cadastradas</small><strong class="red" id="totalDividas">R$ 0,00</strong></div>
-<div class="card"><small>Receitas acumuladas</small><strong class="green" id="totalReceitas">R$ 0,00</strong></div>
-<div class="card"><small>Despesas acumuladas</small><strong class="red" id="totalDespesas">R$ 0,00</strong></div>
-</div>
-<div class="panel">
-<h3>Últimos lançamentos</h3>
-<div id="ultimos"></div>
-</div>
-<div class="panel">
-<h3>Atenção financeira</h3>
-<div id="alertas" class="note"></div>
-</div>
+<section id="inicio" class="active">
+ <h2>Meu painel financeiro</h2>
+ <div class="grid">
+  <div class="card"><small>Entradas da semana</small><div class="value green" id="semEntrada">R$ 0,00</div></div>
+  <div class="card"><small>Saídas da semana</small><div class="value red" id="semSaida">R$ 0,00</div></div>
+  <div class="card"><small>Resultado da semana</small><div class="value" id="semResultado">R$ 0,00</div></div>
+  <div class="card"><small>Dinheiro disponível</small><div class="value orange" id="caixa">R$ 0,00</div></div>
+ </div>
+ <h2>Meu patrimônio reservado</h2>
+ <div class="card">
+  <small>Dinheiro guardado no cofrinho</small>
+  <div class="value green" id="reserva">R$ 0,00</div>
+  <small>Caixa + reserva</small>
+  <div class="value" id="totalGeral">R$ 0,00</div>
+ </div>
+ <h2>Últimos lançamentos</h2>
+ <div class="panel" id="ultimos"></div>
+ <h2>Resumo financeiro</h2>
+ <div class="panel" id="resumo"></div>
 </section>
 
-<section id="movimentos" class="hidden">
-<h2>Lançamentos</h2>
-<div class="panel">
-<h3>Adicionar receita ou despesa</h3>
-<form id="movForm">
-<div class="field"><label>Tipo</label>
-<select id="tipo"><option value="despesa">Despesa</option><option value="receita">Receita recebida</option></select></div>
-<div class="field"><label>Valor (R$)</label><input id="valor" type="number" min="0.01" step="0.01" required placeholder="0,00"></div>
-<div class="field full"><label>Descrição</label><input id="descricao" required placeholder="Ex.: combustível, filmagem, mercado"></div>
-<div class="field"><label>Categoria</label>
-<select id="categoria">
-<option>Alimentação</option><option>Mercado</option><option>Casa</option><option>Água</option><option>Energia</option><option>Internet</option><option>Moradia / financiamento</option><option>Escola</option><option>Combustível</option><option>Transporte</option><option>Saúde</option><option>Lazer / passeios</option><option>Bares e saídas</option><option>Compras pessoais</option><option>Trabalho ADF</option><option>Equipamentos</option><option>Programas e assinaturas</option><option>Serviços de vídeo</option><option>Outros</option>
-</select></div>
-<div class="field"><label>Data</label><input id="dataMov" type="date" required></div>
-<div class="field full"><label>Conta / forma de pagamento</label>
-<select id="conta"><option>Caixa</option><option>Nubank</option><option>C6 Bank</option><option>Dinheiro</option><option>Outro</option></select></div>
-<div class="field full"><button class="primary">Salvar lançamento</button></div>
-</form>
-</div>
-<div class="panel"><h3>Histórico</h3><div id="listaMov"></div></div>
+<section id="lancamentos">
+ <h2>Novo lançamento</h2>
+ <div class="panel">
+  <label>Tipo</label>
+  <select id="tipo"><option value="entrada">Entrada de dinheiro</option><option value="saida">Despesa</option></select>
+  <label>Descrição</label><input id="descricao" placeholder="Ex: Filmagem de evento">
+  <label>Valor (R$)</label><input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00">
+  <label>Categoria</label>
+  <select id="categoria">
+   <option>Trabalho ADF</option><option>Salário</option><option>Alimentação</option><option>Combustível</option><option>Casa</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Compras</option><option>Outros</option>
+  </select>
+  <label>Data</label><input id="data" type="date">
+  <label>Observação</label><textarea id="obs" placeholder="Detalhes opcionais"></textarea>
+  <button class="action" onclick="adicionar()">Salvar lançamento</button>
+ </div>
+ <h2>Histórico</h2>
+ <div class="panel" id="historico"></div>
 </section>
 
-<section id="receber" class="hidden">
-<h2>Valores a receber</h2>
-<div class="panel">
-<h3>Cadastrar serviço / cliente</h3>
-<form id="recForm">
-<div class="field full"><label>Cliente</label><input id="cliente" required placeholder="Nome do cliente"></div>
-<div class="field full"><label>Serviço</label><input id="servico" required placeholder="Ex.: vídeo, evento, edição"></div>
-<div class="field"><label>Valor combinado (R$)</label><input id="valorRec" type="number" min="0.01" step="0.01" required></div>
-<div class="field"><label>Data prevista</label><input id="dataRec" type="date"></div>
-<div class="field full"><button class="primary">Cadastrar valor a receber</button></div>
-</form>
-</div>
-<div class="panel"><h3>Contas a receber</h3><div id="listaRec"></div></div>
+<section id="cofrinho">
+ <h2>Meu cofrinho</h2>
+ <div class="card">
+  <small>Saldo reservado</small>
+  <div class="value green" id="saldoCofre">R$ 0,00</div>
+  <small>Esse dinheiro continua sendo seu, apenas fica separado do caixa.</small>
+ </div>
+ <h2>Movimentar dinheiro</h2>
+ <div class="panel">
+  <label>Operação</label>
+  <select id="operacao"><option value="deposito">Guardar dinheiro (caixa → cofrinho)</option><option value="retirada">Retirar dinheiro (cofrinho → caixa)</option></select>
+  <label>Valor (R$)</label><input type="number" id="valorCofre" min="0.01" step="0.01" placeholder="0,00">
+  <label>Descrição</label><input id="descCofre" placeholder="Ex: Dinheiro que sobrou do trabalho">
+  <button class="action" onclick="movimentarCofre()">Confirmar movimentação</button>
+ </div>
+ <h2>Histórico do cofrinho</h2>
+ <div class="panel" id="histCofre"></div>
 </section>
 
-<section id="dividas" class="hidden">
-<h2>Controle de dívidas</h2>
-<div class="panel">
-<h3>Cadastrar dívida</h3>
-<form id="divForm">
-<div class="field full"><label>Nome da dívida</label><input id="nomeDiv" required placeholder="Ex.: cheque especial Caixa"></div>
-<div class="field"><label>Valor atual devido (R$)</label><input id="valorDiv" type="number" min="0.01" step="0.01" required></div>
-<div class="field"><label>Instituição</label><input id="instituicao" placeholder="Banco ou credor"></div>
-<div class="field full"><button class="primary">Cadastrar dívida</button></div>
-</form>
-</div>
-<div class="panel"><h3>Dívidas cadastradas</h3><div id="listaDiv"></div></div>
+<section id="dividas">
+ <h2>Minhas dívidas</h2>
+ <div class="grid">
+  <div class="card"><small>Total em aberto</small><div class="value red" id="totalDividas">R$ 0,00</div></div>
+  <div class="card"><small>Parcelas cadastradas</small><div class="value" id="numDividas">0</div></div>
+ </div>
+ <h2>Cadastrar dívida</h2>
+ <div class="panel">
+  <label>Nome da dívida</label><input id="nomeDivida" placeholder="Ex: Cheque especial Caixa">
+  <label>Instituição</label><select id="banco"><option>Caixa</option><option>C6 Bank</option><option>Outro</option></select>
+  <label>Valor total (R$)</label><input id="valorDivida" type="number" min="0.01" step="0.01">
+  <label>Valor de cada parcela (R$)</label><input id="parcelaDivida" type="number" min="0" step="0.01">
+  <label>Quantidade de parcelas</label><input id="qtdParcelas" type="number" min="1" step="1" value="1">
+  <label>Vencimento</label><input id="vencimento" type="date">
+  <button class="action" onclick="adicionarDivida()">Cadastrar dívida</button>
+ </div>
+ <h2>Dívidas cadastradas</h2>
+ <div class="panel" id="listaDividas"></div>
 </section>
 
-<section id="metas" class="hidden">
-<h2>Metas financeiras</h2>
-<div class="panel">
-<h3>Criar uma meta</h3>
-<form id="metaForm">
-<div class="field full"><label>Nome da meta</label><input id="nomeMeta" required placeholder="Ex.: comprar um carro"></div>
-<div class="field"><label>Valor desejado (R$)</label><input id="alvoMeta" type="number" min="0.01" step="0.01" required></div>
-<div class="field"><label>Quanto já guardou (R$)</label><input id="atualMeta" type="number" min="0" step="0.01" value="0"></div>
-<div class="field full"><button class="primary">Criar meta</button></div>
-</form>
-</div>
-<div class="panel"><h3>Minhas metas</h3><div id="listaMetas"></div></div>
+<section id="contas">
+ <h2>Contas fixas</h2>
+ <div class="panel">
+  <label>Nome da conta</label><input id="nomeConta" placeholder="Ex: Internet">
+  <label>Valor (R$)</label><input id="valorConta" type="number" min="0.01" step="0.01">
+  <label>Dia do vencimento</label><input id="diaConta" type="number" min="1" max="31" placeholder="Ex: 10">
+  <button class="action" onclick="adicionarConta()">Adicionar conta</button>
+ </div>
+ <div class="panel" id="listaContas"></div>
 </section>
 
-<section id="relatorios" class="hidden">
-<h2>Relatórios</h2>
-<div class="panel">
-<h3>Despesas por categoria</h3>
-<p class="note">Valores de despesas registradas como pagas, considerando todos os períodos.</p>
-<div id="categorias"></div>
-</div>
-<div class="panel">
-<h3>Resumo mensal</h3>
-<div id="resumoMensal"></div>
-</div>
+<section id="metas">
+ <h2>Meus sonhos e objetivos</h2>
+ <div class="panel">
+  <label>Nome da meta</label><input id="nomeMeta" placeholder="Ex: Trocar de carro">
+  <label>Valor desejado (R$)</label><input id="valorMeta" type="number" min="0.01" step="0.01">
+  <button class="action" onclick="adicionarMeta()">Criar meta</button>
+ </div>
+ <div id="listaMetas"></div>
 </section>
 
-<section id="backup" class="hidden">
-<h2>Backup e dados</h2>
-<div class="panel">
-<h3>Exportar seus dados</h3>
-<p class="note">Salve uma cópia dos seus lançamentos, recebimentos, dívidas e metas em um arquivo JSON. Guarde esse arquivo em local seguro.</p>
-<button class="primary" id="exportar">Baixar backup</button>
-<hr>
-<h3>Restaurar backup</h3>
-<p class="note">Escolha um backup criado anteriormente. A restauração substitui os dados atuais deste navegador.</p>
-<input type="file" id="arquivoBackup" accept=".json,application/json">
-<div class="actions"><button class="secondary" id="importar">Restaurar arquivo</button></div>
-<hr>
-<h3>Apagar todos os dados</h3>
-<p class="note">Esta ação não pode ser desfeita. Exporte um backup antes, se quiser guardar seus registros.</p>
-<button class="danger" id="apagarTudo">Apagar todos os dados</button>
-</div>
-<div class="panel">
-<h3>Sobre o armazenamento</h3>
-<p class="note">Os dados ficam salvos neste navegador, neste aparelho. Limpar os dados do navegador pode apagá-los. Não existe login, criptografia, sincronização na nuvem ou conexão com bancos nesta versão. O endereço do aplicativo é público, mas os lançamentos salvos no armazenamento local não são publicados no site.</p>
-</div>
+<section id="backup">
+ <h2>Segurança dos meus dados</h2>
+ <div class="panel">
+  <p>Faça backups regularmente para não perder suas informações.</p>
+  <button class="action" onclick="exportar()">Baixar backup dos meus dados</button>
+  <hr style="border-color:#333;margin:20px 0">
+  <label>Restaurar backup (.json)</label>
+  <input type="file" id="arquivoBackup" accept=".json,application/json">
+  <button class="action" onclick="importar()">Restaurar dados</button>
+  <p style="font-size:12px;color:#aaa">Os dados são armazenados neste navegador. O backup permite transferir ou recuperar suas informações.</p>
+  <button class="secondary" onclick="limpar()" style="color:#fb7185">Apagar todos os dados</button>
+ </div>
 </section>
 </main>
-<footer>ADF Meu Financeiro · Anderson Duarte Filmes</footer>
+<footer>ADF MEU FINANCEIRO • Controle, organização e conquistas.</footer>
 
 <script>
-const KEY = "adf_meu_financeiro_v1";
-let db = {movimentos:[], receber:[], dividas:[], metas:[]};
+const KEY='adf_financeiro_v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ lancamentos:[],cofre:[],dividas:[],contas:[],metas:[]
+};
+function salvar(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function dinheiro(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function dataHoje(){return new Date().toISOString().slice(0,10)}
+document.getElementById('data').value=dataHoje();
 
-function carregar(){
-  try{
-    const salvo=localStorage.getItem(KEY);
-    if(salvo){
-      const dados=JSON.parse(salvo);
-      db={movimentos:Array.isArray(dados.movimentos)?dados.movimentos:[],receber:Array.isArray(dados.receber)?dados.receber:[],dividas:Array.isArray(dados.dividas)?dados.dividas:[],metas:Array.isArray(dados.metas)?dados.metas:[]};
-    }
-  }catch(e){alert("Não foi possível ler os dados salvos neste navegador.");}
+function tab(id,btn){
+ document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');render();
 }
-function salvar(){localStorage.setItem(KEY,JSON.stringify(db));render();}
-const dinheiro=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const hoje=()=>new Date().toISOString().slice(0,10);
-const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const el=id=>document.getElementById(id);
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const dataBR=d=>d?new Date(d+"T12:00:00").toLocaleDateString("pt-BR"):"Sem data";
-const soma=(arr,fn)=>arr.reduce((t,x)=>t+fn(x),0);
-
-function navegar(tab){
-  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
-  el(tab).classList.remove("hidden");
-  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+function soma(arr,tipo){
+ return arr.filter(x=>!tipo||x.tipo===tipo).reduce((s,x)=>s+Number(x.valor),0)
 }
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>navegar(b.dataset.tab)));
-
-el("dataMov").value=hoje();
-
-el("movForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  db.movimentos.push({id:id(),tipo:el("tipo").value,valor:Number(el("valor").value),descricao:el("descricao").value.trim(),categoria:el("categoria").value,data:el("dataMov").value,conta:el("conta").value});
-  e.target.reset();el("dataMov").value=hoje();salvar();
-});
-
-el("recForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  db.receber.push({id:id(),cliente:el("cliente").value.trim(),servico:el("servico").value.trim(),valor:Number(el("valorRec").value),recebido:0,data:el("dataRec").value});
-  e.target.reset();salvar();
-});
-
-el("divForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  db.dividas.push({id:id(),nome:el("nomeDiv").value.trim(),valor:Number(el("valorDiv").value),instituicao:el("instituicao").value.trim()});
-  e.target.reset();salvar();
-});
-
-el("metaForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  const alvo=Number(el("alvoMeta").value),atual=Number(el("atualMeta").value);
-  if(atual>alvo){alert("O valor guardado não pode ser maior que a meta.");return;}
-  db.metas.push({id:id(),nome:el("nomeMeta").value.trim(),alvo,atual});
-  e.target.reset();el("atualMeta").value=0;salvar();
-});
-
-function remover(tipo,ident){
-  if(!confirm("Deseja realmente excluir este registro?"))return;
-  db[tipo]=db[tipo].filter(x=>x.id!==ident);salvar();
+function adicionar(){
+ let v=Number(document.getElementById('valor').value);
+ let d=document.getElementById('descricao').value.trim();
+ if(!d||v<=0)return alert('Informe uma descrição e um valor válido.');
+ db.lancamentos.push({
+ id:Date.now(),tipo:document.getElementById('tipo').value,
+ descricao:d,valor:v,categoria:document.getElementById('categoria').value,
+ data:document.getElementById('data').value||dataHoje(),
+ obs:document.getElementById('obs').value
+ });
+ ['descricao','valor','obs'].forEach(x=>document.getElementById(x).value='');
+ salvar();alert('Lançamento salvo!');
 }
-function receberPagamento(ident){
-  const item=db.receber.find(x=>x.id===ident);if(!item)return;
-  const falta=item.valor-item.recebido;
-  const v=Number(prompt("Quanto foi recebido agora? Valor restante: "+dinheiro(falta)));
-  if(!Number.isFinite(v)||v<=0||v>falta){alert("Informe um valor válido, até o saldo restante.");return;}
-  item.recebido+=v;
-  db.movimentos.push({id:id(),tipo:"receita",valor:v,descricao:"Recebimento: "+item.cliente+" - "+item.servico,categoria:"Serviços de vídeo",data:hoje(),conta:"Caixa"});
-  salvar();
+function excluirLancamento(id){
+ if(confirm('Excluir este lançamento?')){db.lancamentos=db.lancamentos.filter(x=>x.id!==id);salvar()}
 }
-function pagarDivida(ident){
-  const d=db.dividas.find(x=>x.id===ident);if(!d)return;
-  const v=Number(prompt("Valor pago agora. Dívida atual: "+dinheiro(d.valor)));
-  if(!Number.isFinite(v)||v<=0||v>d.valor){alert("Informe um valor válido.");return;}
-  d.valor-=v;
-  db.movimentos.push({id:id(),tipo:"despesa",valor:v,descricao:"Pagamento de dívida: "+d.nome,categoria:"Outros",data:hoje(),conta:"Caixa"});
-  salvar();
+function movimentarCofre(){
+ let v=Number(valorCofre.value),op=operacao.value;
+ if(v<=0)return alert('Informe um valor válido.');
+ let caixa=soma(db.lancamentos,'entrada')-soma(db.lancamentos,'saida')-soma(db.cofre.filter(x=>x.tipo==='deposito'))+soma(db.cofre.filter(x=>x.tipo==='retirada'));
+ let reserva=soma(db.cofre.filter(x=>x.tipo==='deposito'))-soma(db.cofre.filter(x=>x.tipo==='retirada'));
+ if(op==='deposito'&&v>caixa)return alert('Saldo disponível em caixa insuficiente.');
+ if(op==='retirada'&&v>reserva)return alert('Saldo insuficiente no cofrinho.');
+ db.cofre.push({id:Date.now(),tipo:op,valor:v,descricao:descCofre.value||'Movimentação',data:dataHoje()});
+ valorCofre.value='';descCofre.value='';salvar();alert('Movimentação realizada!');
 }
-function contribuir(ident){
-  const m=db.metas.find(x=>x.id===ident);if(!m)return;
-  const falta=m.alvo-m.atual;
-  const v=Number(prompt("Quanto deseja adicionar à meta? Falta: "+dinheiro(falta)));
-  if(!Number.isFinite(v)||v<=0||v>falta){alert("Informe um valor válido.");return;}
-  m.atual+=v;salvar();
+function adicionarDivida(){
+ let nome=nomeDivida.value.trim(),v=Number(valorDivida.value);
+ if(!nome||v<=0)return alert('Preencha o nome e o valor da dívida.');
+ db.dividas.push({id:Date.now(),nome,banco:banco.value,valor:v,pago:0,parcela:Number(parcelaDivida.value)||0,qtd:Number(qtdParcelas.value)||1,vencimento:vencimento.value});
+ nomeDivida.value='';valorDivida.value='';parcelaDivida.value='';salvar();
 }
-
-function itemHTML(titulo,detalhe,valor,classe,botoes=""){
- return `<div class="item"><div><strong>${esc(titulo)}</strong><small>${esc(detalhe)}</small></div><div style="text-align:right"><strong class="${classe||""}">${dinheiro(valor)}</strong><div class="actions">${botoes}</div></div></div>`;
+function pagarDivida(id){
+ let d=db.dividas.find(x=>x.id===id);
+ let v=Number(prompt('Quanto deseja pagar desta dívida? Saldo: '+dinheiro(d.valor-d.pago)));
+ if(!v||v<=0||v>d.valor-d.pago)return alert('Valor inválido.');
+ let caixa=soma(db.lancamentos,'entrada')-soma(db.lancamentos,'saida')-soma(db.cofre.filter(x=>x.tipo==='deposito'))+soma(db.cofre.filter(x=>x.tipo==='retirada'));
+ if(v>caixa)return alert('Saldo em caixa insuficiente.');
+ d.pago+=v;
+ db.lancamentos.push({id:Date.now(),tipo:'saida',descricao:'Pagamento: '+d.nome,valor:v,categoria:'Pagamento de dívida',data:dataHoje(),obs:'Pagamento registrado na área de dívidas'});
+ salvar();
+}
+function excluirDivida(id){
+ if(confirm('Excluir esta dívida?')){db.dividas=db.dividas.filter(x=>x.id!==id);salvar()}
+}
+function adicionarConta(){
+ let nome=nomeConta.value.trim(),v=Number(valorConta.value),dia=Number(diaConta.value);
+ if(!nome||v<=0||dia<1||dia>31)return alert('Confira os dados da conta.');
+ db.contas.push({id:Date.now(),nome,valor:v,dia,paga:false});
+ nomeConta.value='';valorConta.value='';diaConta.value='';salvar();
+}
+function marcarConta(id){
+ let c=db.contas.find(x=>x.id===id);
+ if(c.paga)return alert('Esta conta já foi marcada como paga.');
+ let caixa=soma(db.lancamentos,'entrada')-soma(db.lancamentos,'saida')-soma(db.cofre.filter(x=>x.tipo==='deposito'))+soma(db.cofre.filter(x=>x.tipo==='retirada'));
+ if(c.valor>caixa)return alert('Saldo em caixa insuficiente.');
+ c.paga=true;
+ db.lancamentos.push({id:Date.now(),tipo:'saida',descricao:'Conta fixa: '+c.nome,valor:c.valor,categoria:'Contas fixas',data:dataHoje(),obs:'Conta marcada como paga'});
+ salvar();
+}
+function excluirConta(id){
+ if(confirm('Excluir esta conta?')){db.contas=db.contas.filter(x=>x.id!==id);salvar()}
+}
+function adicionarMeta(){
+ let nome=nomeMeta.value.trim(),v=Number(valorMeta.value);
+ if(!nome||v<=0)return alert('Informe a meta e o valor desejado.');
+ db.metas.push({id:Date.now(),nome,valor:v});
+ nomeMeta.value='';valorMeta.value='';salvar();
+}
+function excluirMeta(id){
+ if(confirm('Excluir esta meta?')){db.metas=db.metas.filter(x=>x.id!==id);salvar()}
 }
 function render(){
- const mes=hoje().slice(0,7);
- const mov=db.movimentos;
- const receitas=soma(mov.filter(x=>x.tipo==="receita"),x=>x.valor);
- const despesas=soma(mov.filter(x=>x.tipo==="despesa"),x=>x.valor);
- const rMes=soma(mov.filter(x=>x.tipo==="receita"&&x.data?.startsWith(mes)),x=>x.valor);
- const dMes=soma(mov.filter(x=>x.tipo==="despesa"&&x.data?.startsWith(mes)),x=>x.valor);
- const aReceber=soma(db.receber,x=>Math.max(0,x.valor-x.recebido));
- const dividas=soma(db.dividas,x=>x.valor);
- const saldo=receitas-despesas;
- el("saldo").textContent=dinheiro(saldo);
- el("receitasMes").textContent=dinheiro(rMes);
- el("despesasMes").textContent=dinheiro(dMes);
- el("resultadoMes").textContent=dinheiro(rMes-dMes);
- el("resultadoMes").className=(rMes-dMes>=0?"green":"red");
- el("totalReceber").textContent=dinheiro(aReceber);
- el("totalDividas").textContent=dinheiro(dividas);
- el("totalReceitas").textContent=dinheiro(receitas);
- el("totalDespesas").textContent=dinheiro(despesas);
-
- const recentes=[...mov].sort((a,b)=>b.data.localeCompare(a.data)).slice(0,6);
- el("ultimos").innerHTML=recentes.length?recentes.map(x=>itemHTML(x.descricao,x.categoria+" · "+dataBR(x.data),x.valor,x.tipo==="receita"?"green":"red")).join(""):'<div class="empty">Nenhum lançamento cadastrado.</div>';
- el("listaMov").innerHTML=mov.length?[...mov].sort((a,b)=>b.data.localeCompare(a.data)).map(x=>itemHTML(x.descricao,x.tipo.toUpperCase()+" · "+x.categoria+" · "+x.conta+" · "+dataBR(x.data),x.valor,x.tipo==="receita"?"green":"red",`<button class="danger" onclick="remover('movimentos','${x.id}')">Excluir</button>`)).join(""):'<div class="empty">Seu histórico está vazio.</div>';
-
- el("listaRec").innerHTML=db.receber.length?db.receber.map(x=>{
-  const falta=Math.max(0,x.valor-x.recebido);
-  return itemHTML(x.cliente,x.servico+" · Previsto: "+dataBR(x.data)+" · Recebido: "+dinheiro(x.recebido),falta,"orange",`${falta>0?`<button class="secondary" onclick="receberPagamento('${x.id}')">Registrar pagamento</button>`:"<span class='tag'>Quitado</span>" }<button class="danger" onclick="remover('receber','${x.id}')">Excluir</button>`);
- }).join(""):'<div class="empty">Nenhum valor a receber cadastrado.</div>';
-
- el("listaDiv").innerHTML=db.dividas.length?db.dividas.map(x=>itemHTML(x.nome,x.instituicao||"Instituição não informada",x.valor,"red",`<button class="secondary" onclick="pagarDivida('${x.id}')">Registrar pagamento</button><button class="danger" onclick="remover('dividas','${x.id}')">Excluir</button>`)).join(""):'<div class="empty">Nenhuma dívida cadastrada.</div>';
-
- el("listaMetas").innerHTML=db.metas.length?db.metas.map(x=>{
-  const pct=Math.min(100,x.atual/x.alvo*100);
-  return `<div class="item"><div style="width:100%"><strong>${esc(x.nome)}</strong><small>${dinheiro(x.atual)} guardados de ${dinheiro(x.alvo)} · ${pct.toFixed(1)}%</small><div class="progress"><div style="width:${pct}%"></div></div><div class="actions">${x.atual<x.alvo?`<button class="secondary" onclick="contribuir('${x.id}')">Adicionar valor</button>`:"<span class='tag'>Meta alcançada!</span>"}<button class="danger" onclick="remover('metas','${x.id}')">Excluir</button></div></div></div>`;
- }).join(""):'<div class="empty">Crie sua primeira meta.</div>';
-
- const grupos={};
- mov.filter(x=>x.tipo==="despesa").forEach(x=>grupos[x.categoria]=(grupos[x.categoria]||0)+x.valor);
- const ordem=Object.entries(grupos).sort((a,b)=>b[1]-a[1]);
- el("categorias").innerHTML=ordem.length?ordem.map(([cat,v])=>`<div class="item"><strong>${esc(cat)}</strong><strong class="red">${dinheiro(v)}</strong></div>`).join(""):'<div class="empty">Ainda não há despesas registradas.</div>';
-
- const meses={};
- mov.forEach(x=>{const k=x.data?.slice(0,7)||"Sem data";if(!meses[k])meses[k]={r:0,d:0};meses[k][x.tipo==="receita"?"r":"d"]+=x.valor;});
- const chaves=Object.keys(meses).sort().reverse();
- el("resumoMensal").innerHTML=chaves.length?chaves.map(k=>`<div class="item"><div><strong>${k}</strong><small>Receitas: ${dinheiro(meses[k].r)} · Despesas: ${dinheiro(meses[k].d)}</small></div><strong class="${meses[k].r-meses[k].d>=0?"green":"red"}">${dinheiro(meses[k].r-meses[k].d)}</strong></div>`).join(""):'<div class="empty">Sem dados mensais ainda.</div>';
-
- const atrasados=db.receber.filter(x=>x.data&&x.data<hoje()&&x.valor>x.recebido);
- el("alertas").innerHTML=`Você tem ${atrasados.length} recebimento(s) com data prevista vencida e saldo pendente.<br>Valores a receber não entram no saldo disponível até serem registrados como recebidos.<br>Saldo calculado = receitas lançadas menos despesas lançadas.`;
+ let entradas=soma(db.lancamentos,'entrada'),saidas=soma(db.lancamentos,'saida');
+ let dep=soma(db.cofre.filter(x=>x.tipo==='deposito'));
+ let ret=soma(db.cofre.filter(x=>x.tipo==='retirada'));
+ let caixa=entradas-saidas-dep+ret,reserva=dep-ret;
+ let agora=new Date(),inicio=new Date(agora);
+ inicio.setDate(agora.getDate()-((agora.getDay()+6)%7));inicio.setHours(0,0,0,0);
+ let semana=db.lancamentos.filter(x=>new Date(x.data+'T12:00:00')>=inicio);
+ let se=soma(semana,'entrada'),ss=soma(semana,'saida');
+ semEntrada.textContent=dinheiro(se);semSaida.textContent=dinheiro(ss);
+ semResultado.textContent=dinheiro(se-ss);
+ caixaEl=document.getElementById('caixa');caixaEl.textContent=dinheiro(caixa);
+ document.getElementById('reserva').textContent=dinheiro(reserva);
+ document.getElementById('saldoCofre').textContent=dinheiro(reserva);
+ document.getElementById('totalGeral').textContent=dinheiro(caixa+reserva);
+ document.getElementById('ultimos').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).slice(0,5));
+ document.getElementById('historico').innerHTML=listaLancamentos(db.lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)));
+ document.getElementById('resumo').innerHTML='<p>Entradas acumuladas: <b class="green">'+dinheiro(entradas)+'</b></p><p>Despesas acumuladas: <b class="red">'+dinheiro(saidas)+'</b></p><p>Dinheiro reservado: <b class="orange">'+dinheiro(reserva)+'</b></p>';
+ document.getElementById('histCofre').innerHTML=db.cofre.slice().reverse().map(x=>'<div class="item"><strong>'+esc(x.descricao)+'</strong><small>'+x.data+' • '+(x.tipo==='deposito'?'Depósito':'Retirada')+'</small><div class="'+(x.tipo==='deposito'?'green':'orange')+'">'+dinheiro(x.valor)+'</div></div>').join('')||'<div class="empty">Nenhuma movimentação.</div>';
+ let abertas=db.dividas.reduce((s,x)=>s+(x.valor-x.pago),0);
+ document.getElementById('totalDividas').textContent=dinheiro(abertas);
+ document.getElementById('numDividas').textContent=db.dividas.length;
+ document.getElementById('listaDividas').innerHTML=db.dividas.map(x=>{
+ let restante=x.valor-x.pago,percent=Math.min(100,x.pago/x.valor*100);
+ return '<div class="item"><button class="secondary" onclick="excluirDivida('+x.id+')">Excluir</button><strong>'+esc(x.nome)+' • '+esc(x.banco)+'</strong><small>Vencimento: '+(x.vencimento||'Não informado')+' • '+x.qtd+' parcela(s)</small><p>Valor: '+dinheiro(x.valor)+' | Pago: '+dinheiro(x.pago)+'</p><p class="'+(restante<=0?'green':'red')+'">Restante: '+dinheiro(restante)+' • '+(restante<=0?'Quitada':x.pago>0?'Parcialmente paga':'Em aberto')+'</p><div class="progress"><div style="width:'+percent+'%"></div></div>'+(restante>0?'<button class="action" onclick="pagarDivida('+x.id+')">Registrar pagamento</button>':'')+'</div>'
+ }).join('')||'<div class="empty">Nenhuma dívida cadastrada.</div>';
+ document.getElementById('listaContas').innerHTML=db.contas.map(x=>'<div class="item"><button class="secondary" onclick="excluirConta('+x.id+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>'+dinheiro(x.valor)+' • Vence dia '+x.dia+'</p><button class="secondary" onclick="marcarConta('+x.id+')">'+(x.paga?'Paga':'Marcar como paga')+'</button></div>').join('')||'<div class="empty">Nenhuma conta cadastrada.</div>';
+ document.getElementById('listaMetas').innerHTML=db.metas.map(x=>{
+ let percent=Math.min(100,reserva/x.valor*100);
+ return '<div class="panel"><button class="secondary" onclick="excluirMeta('+x.id+')">Excluir</button><strong>'+esc(x.nome)+'</strong><p>Objetivo: '+dinheiro(x.valor)+'</p><p>Progresso considerando o cofrinho: '+percent.toFixed(1)+'%</p><div class="progress"><div style="width:'+percent+'%"></div></div></div>'
+ }).join('')||'<div class="empty">Crie sua primeira meta!</div>';
 }
-
-el("exportar").onclick=()=>{
- const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="ADF-meu-financeiro-backup.json";a.click();URL.revokeObjectURL(url);
-};
-el("importar").onclick=()=>{
- const f=el("arquivoBackup").files[0];if(!f){alert("Escolha um arquivo de backup.");return;}
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const d=JSON.parse(reader.result);
-   if(!d||!Array.isArray(d.movimentos)||!Array.isArray(d.receber)||!Array.isArray(d.dividas)||!Array.isArray(d.metas))throw Error();
-   if(!confirm("A restauração substituirá os dados atuais. Continuar?"))return;
-   db=d;salvar();alert("Backup restaurado.");
-  }catch(e){alert("Arquivo inválido ou incompatível.");}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function listaLancamentos(arr){
+ return arr.map(x=>'<div class="item"><button class="secondary" onclick="excluirLancamento('+x.id+')">Excluir</button><strong>'+esc(x.descricao)+'</strong><small>'+x.data+' • '+esc(x.categoria)+'</small><div class="'+(x.tipo==='entrada'?'green':'red')+'">'+(x.tipo==='entrada'?'+ ':'− ')+dinheiro(x.valor)+'</div></div>').join('')||'<div class="empty">Nenhum lançamento cadastrado.</div>'
+}
+function exportar(){
+ let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ADF-meu-financeiro-backup.json';a.click();URL.revokeObjectURL(a.href);
+}
+function importar(){
+ let f=document.getElementById('arquivoBackup').files[0];if(!f)return alert('Selecione um arquivo.');
+ let r=new FileReader();
+ r.onload=()=>{
+ try{
+ let novo=JSON.parse(r.result);
+ if(!novo||!Array.isArray(novo.lancamentos)||!Array.isArray(novo.cofre)||!Array.isArray(novo.dividas)||!Array.isArray(novo.contas)||!Array.isArray(novo.metas))throw Error();
+ if(!confirm('Isso substituirá os dados atuais. Continuar?'))return;
+ db=novo;salvar();alert('Backup restaurado!');
+ }catch(e){alert('Arquivo inválido ou incompatível.')}
  };
- reader.readAsText(f);
-};
-el("apagarTudo").onclick=()=>{
- if(confirm("Tem certeza? Todos os dados deste aplicativo neste navegador serão apagados.")){
-  if(confirm("Confirme mais uma vez: deseja apagar tudo?")){
-   db={movimentos:[],receber:[],dividas:[],metas:[]};salvar();
-  }
+ r.readAsText(f);
+}
+function limpar(){
+ if(confirm('ATENÇÃO: apagar todos os seus dados definitivamente? Faça backup antes.')){
+ if(confirm('Tem certeza absoluta?')){db={lancamentos:[],cofre:[],dividas:[],contas:[],metas:[]};salvar()}
  }
-};
-carregar();render();
+}
+render();
 </script>
 </body>
 </html>
