@@ -1,0 +1,17 @@
+{
+  "name": "ADF Meu Financeiro",
+  "short_name": "ADF Financeiro",
+  "description": "Controle financeiro Anderson Duarte Filmes",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101010",
+  "theme_color": "#101010",
+  "icons": [
+    {
+      "src": "./logo-adf.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
